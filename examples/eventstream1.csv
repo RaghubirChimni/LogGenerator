@@ -1,0 +1,8 @@
+process,Order,Alice,laptop,0
+process,Ship,Alice,111 Main Street,laptop,10
+
+process,Order,Alice,ipad,20
+process,Ship,Alice,111 Main Street,ipad,28
+
+process,Order,Alice,charger,50
+process,Ship,Alice,111 Main Street,charger,67

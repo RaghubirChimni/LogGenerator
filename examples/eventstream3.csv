@@ -1,0 +1,10 @@
+process,Register,Alice,12344567,123 Main Street,0
+
+process,AddToCart,Donna,charger,40
+process,Payment,Donna,12344567,$30,50
+pause
+process,AddToCart,Charlie,laptop,60
+process,Payment,Charlie,12344567,$300,90
+pause
+process,AddToCart,Bob,ipad,400
+process,Payment,Bob,12344567,$800,500

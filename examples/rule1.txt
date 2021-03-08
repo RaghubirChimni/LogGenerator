@@ -1,0 +1,9 @@
+Rule 
+OrderThenShip
+if
+Order(user a, item b)@x
+then
+Ship(user a, address addr, item b)@z
+x <= z
+x+10 >= z
+end

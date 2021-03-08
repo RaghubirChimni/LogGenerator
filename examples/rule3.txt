@@ -1,0 +1,10 @@
+Rule 
+AddToCartAndPayAndShipThenRegistered
+if
+AddToCart(user a, item i)@x
+Payment(user a, cardNum c, price p)@y
+x <= y
+then
+Register(user b, cardNum c, address addr)@w
+w < x
+end
