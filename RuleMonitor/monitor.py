@@ -89,7 +89,7 @@ class Monitor:
 						else:
 							output_string += "Matched Body Assignment: \n"+str(a)+"\n"
 
-		output_string = "Number of Violations: "+str(number_of_violations)+"\n"+output_string
+		output_string = "Number of Violations: "+str(number_of_violations)+"\n"+output_string[:-2]
 
 		return self.assignmentVector, output_string, (end-start)
 
