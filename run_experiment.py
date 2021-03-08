@@ -94,8 +94,9 @@ if __name__ == "__main__":
     for i in range(number_of_runs):
         assignment_vector, output_string, time_to_monitor = m.monitoringLoop(eventstream_file_path)
         m.reset()
-        print("Trial "+str(i)+": "+str(time_to_monitor)+" seconds")
-        # print(output_string)
+        print("\n"+20*'-')
+        print("\nTrial "+str(i)+": "+str(time_to_monitor)+" seconds")
+        print(output_string)
         average += time_to_monitor
 
     print("\nExperiment Summary")
