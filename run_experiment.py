@@ -27,6 +27,8 @@ def create_eventstream_from_simulator(mean, standard_deviation, simulator_output
     #Opens file to write simulator output
     f = open(path)
 
+    ordered_file_path = ""
+
     # Open file to write ordered output into
     if sys.platform == "darwin":
         ordered_file_path = "output/" + simulator_output_file_name + "_ordered.txt"
@@ -65,6 +67,8 @@ def create_eventstream_from_simulator(mean, standard_deviation, simulator_output
     f.close()
     outfile.close()
 
+    return ordered_file_path
+
 if __name__ == "__main__":
 
     rule_file_name = sys.argv[1]
@@ -76,15 +80,14 @@ if __name__ == "__main__":
     
     simulator_output_file_name = sys.argv[2]
 
-    if sys.platform == "darwin":
-        eventstream_file_path = "output/" + simulator_output_file_name + "_ordered.txt"
-    else:
-        eventstream_file_path = "output\\" + simulator_output_file_name + "_ordered.txt"
+    eventstream_file_path = ""
 
-    create_new_file = False
+    create_new_file = True
 
     if create_new_file:
-        create_eventstream_from_simulator(10, 5, eventstream_file_path)
+        mean = 10
+        standard_deviation = 5
+        eventstream_file_path = create_eventstream_from_simulator(mean, standard_deviation, simulator_output_file_name)
     
     m = Monitor("MyMonitor", rule_file_path)
 
