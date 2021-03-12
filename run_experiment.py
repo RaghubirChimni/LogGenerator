@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     eventstream_file_path = "output\\" + simulator_output_file_name + '.txt'
 
-    create_new_file = True
+    create_new_file = False
 
     if create_new_file:
         mean = 10
