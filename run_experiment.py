@@ -13,7 +13,7 @@ import time
 
 def create_eventstream_from_simulator(mean, standard_deviation, simulator_output_file_name):
     
-    sm = SimulationManager(start = datetime.now(), end = datetime.now() + timedelta(days=3))
+    sm = SimulationManager(start = datetime.now(), end = datetime.now() + timedelta(days=2.9))
     # writes results into <filename>.txt
     sm.simulate(simulator_output_file_name) 
 
@@ -39,13 +39,20 @@ def create_eventstream_from_simulator(mean, standard_deviation, simulator_output
 
     # list of names to pull from 
     names = ['Alice', 'Bob', 'Charlie', 'David', 'Emily', 'Frank']
+    cities = ['Boston', "Miami", "Seattle", "Chicago"]
+    universities = ["UCSB", "Berkeley", "UT", "MIT"]
+    genders = ["M", "F", "X"]
+    marriage = ["True", "False"]
 
+    # add dob,height,weight,children
     # keeps track of attributes for pid and line
     name = ''
     age = ''
     addToLine = ''
     splitLine = []
-
+    city = ''
+    gender = ''
+    married = '' 
     # how it orders the file by pid
     for line in sorted(f, key=lambda line: int(line.split()[1])):
         line = line[:line.index("#")-1] # remove '#' and everything beyond
@@ -60,6 +67,7 @@ def create_eventstream_from_simulator(mean, standard_deviation, simulator_output
         
         if('check_faq' in splitLine or 'send_response' in splitLine or 'open_support' in splitLine):
             addToLine = addToLine + ' Age=' + age
+            # city, gender, ,...
 
         outfile.write(line.rstrip() + addToLine +'\n')
 
@@ -80,7 +88,7 @@ if __name__ == "__main__":
     
     simulator_output_file_name = sys.argv[2]
 
-    eventstream_file_path = ""
+    eventstream_file_path = "output\\" + simulator_output_file_name + '.txt'
 
     create_new_file = True
 
@@ -92,7 +100,7 @@ if __name__ == "__main__":
     m = Monitor("MyMonitor", rule_file_path)
 
     average = 0
-    number_of_runs = 4
+    number_of_runs = 5
 
     for i in range(number_of_runs):
         assignment_vector, output_string, time_to_monitor = m.monitoringLoop(eventstream_file_path)
