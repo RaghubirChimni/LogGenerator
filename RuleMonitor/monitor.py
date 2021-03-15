@@ -23,14 +23,16 @@ class Monitor:
 
 		eventstream_length = len(eventstream)
 
-		userInput = ''
+		userMode = 'normal'
+
+		userInput = 'n'
 
 		start = time.time()
 
 		i=0
 
 		while ((userInput != 'q') and (i < eventstream_length)):
-
+			
 			if userInput == 'q':
 				break
 
@@ -42,38 +44,23 @@ class Monitor:
 					self.findMatches(r)
 
 			if userInput == 'n':
-				if i == eventstream_length:
-					print("End of sequence")
-
 				if eventstream[i].eventType == "process":
-					self.handleProcessEvent(eventstream[i])
-
-				for r in self.ruleVector:
-					self.findMatches(r)
-
-				self.removeExpiredData(eventstream[i])
-
-				i += 1
-
-			if userInput == 'f':
-				while (i != eventstream_length):
-					
-					if eventstream[i].eventType == "process":
-						self.handleProcessEvent(eventstream[i])					
+					self.handleProcessEvent(eventstream[i])					
 					
 					for r in self.ruleVector:
 						self.findMatches(r)
 
-					self.removeExpiredData(eventstream[i])
+					batch_size = 1000
+
+					if i%batch_size == 0:
+						self.removeExpiredData(eventstream[i])
 
 					i += 1
 
 			if userInput == 'x':
 				self.removeExpiredData(eventstream[i])
 
-			#print ("Input: ", end='')
 			#userInput = raw_input()
-			userInput = 'f'
 
 		end = time.time()
 
@@ -90,6 +77,8 @@ class Monitor:
 							output_string += "Matched Body Assignment: \n"+str(a)+"\n"
 
 		output_string = "Number of Violations: "+str(number_of_violations)+"\n"+output_string[:-2]
+
+		output_string = "Number of Violations: "+str(number_of_violations)
 
 		return self.assignmentVector, output_string, (end-start)
 
@@ -248,16 +237,13 @@ class Monitor:
 	# Removing data that expires before time of event e
 	def removeExpiredData(self, e: Event):
 		
-		# this removal is an optimization, ignoring it for now by returning early
-		return
-		
 		latestEventTime = int(e.values[-1])
 
 		unexpiredData = []
 		expiredData = []
 
 		for a in self.assignmentVector:
-			if a.expirationTime < latestEventTime:
+			if latestEventTime <= a.expirationTime:
 				unexpiredData.append(a)
 			else:
 				expiredData.append(a)

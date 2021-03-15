@@ -114,6 +114,7 @@ class Assignment:
 		#result += "rule: "+self.rulePointer.ruleName+', '
 		#result += "type: "+self.typeOfAssignment+', '
 		#result += "complete: "+str(self.complete)+'\n'
+		result += "expirationTime: "+str(self.expirationTime)+'\n'
 		if not self.complete:
 			result += "values: "
 			for v in self.variables:
