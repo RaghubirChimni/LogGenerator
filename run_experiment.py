@@ -38,11 +38,15 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
     # simulator generates ~950 activites per day
     simulated_days = number_activities/950
 
-    simulator_file_name = simulator_file_name + "_" + str(number_activities) + "_" + str(number_data_elements)
-
     sm = SimulationManager(start = datetime.now(), end = datetime.now() + timedelta(days=simulated_days))
+
+    simulator_file_name = simulator_file_name + "_" +str(number_activities)
     # writes results into <filename>.txt
 
+    # different resurce_limit values produce different amounts of overlap
+    # limits = 5 => overlap ~40+
+    # limits = 10 => overlap ~20
+    # limits = 50 => overlap ~10
     sm.simulate(name=simulator_file_name,resource_limit={'support': 30, 'trust': 30}) 
 
     # Get file path for output of simulation
@@ -60,15 +64,15 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
     average_overlap = calculate_concurrency(simulator_output_path)
     print("average_overlap in simulation:",str(average_overlap))
 
-    ordered_file_path = ""
+    cleaned_file_path = ""
 
     # Open file to write ordered output into
     if sys.platform == "darwin":
-        ordered_file_path = "output/" + simulator_file_name + "_" + str(number_simulated_activities) + "_" + str(number_data_elements) + "_ordered.txt"
+        cleaned_file_path = "output/" + simulator_file_name + "_" + str(number_simulated_activities) + "act_" + str(number_data_elements) + "_cleaned.txt"
     else:
-        ordered_file_path = "output\\" + simulator_file_name + "_" + str(number_simulated_activities) + "_" + str(number_data_elements) + "_ordered.txt"
+        cleaned_file_path = "output\\" + simulator_file_name + "_" + str(number_simulated_activities) + "_" + str(number_data_elements) + "_cleaned.txt"
 
-    outfile = open(ordered_file_path, "w")
+    outfile = open(cleaned_file_path, "w")
 
     data_elements = ["Name","City","University","Gender","Income"]
 
@@ -118,21 +122,11 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
     f.close()
     outfile.close()
 
-    return number_simulated_activities, ordered_file_path
+    return number_simulated_activities, cleaned_file_path
 
 if __name__ == "__main__":
 
-    rule_file_name = sys.argv[1]
-
-    if sys.platform == "darwin":
-        rule_file_path = "examples/" + rule_file_name
-    else:
-        rule_file_path = "examples\\" + rule_file_name
-
-    if sys.platform == "darwin":
-        output_path = "output/"
-    else:
-        output_path = "output\\" 
+    rule_file_path = sys.argv[1]
     
     simulator_file_name = sys.argv[2]
 
@@ -140,9 +134,9 @@ if __name__ == "__main__":
 
 
     #for target_number_activities in [50, 100, 500, 1000, 5000, 10000]:
-    base = 1000
+    base = 500
 
-    for target_number_activities in [base, base*1.5, base*2, base*10]: #, base*10, base*20, base*50, base*100]:
+    for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
 
         target_number_activities = int(target_number_activities)
 

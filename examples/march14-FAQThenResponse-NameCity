@@ -1,0 +1,9 @@
+Rule 
+FAQThenResponse
+if
+read(support a, value d, class b, name c, city e)@x
+then
+check_faq(support a, name c, city e)@z
+x <= z
+x + 10 >= z
+end

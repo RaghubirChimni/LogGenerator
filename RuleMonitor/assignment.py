@@ -21,7 +21,6 @@ class Assignment:
 	def computeExpirationTime(self):
 
 		# TO DO: replace the high/low calculations with a symbolic package
-
 		constraints = []
 
 		if ((not self.complete) and self.typeOfAssignment=='body'):
@@ -43,7 +42,7 @@ class Assignment:
 		highest = {}
 
 		currentTime = 0
-		lastTime = 10000
+		lastTime = 100000
 
 		# initialize higher and lower bounds for unknown variables
 		for v in timeVariables:

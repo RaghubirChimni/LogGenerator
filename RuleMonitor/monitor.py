@@ -44,13 +44,21 @@ class Monitor:
 					self.findMatches(r)
 
 			if userInput == 'n':
+
+				'''
+				input()
+
+				print("number of assigments",len(self.assignmentVector))
+				self.printAssignments()
+				'''
+
 				if eventstream[i].eventType == "process":
 					self.handleProcessEvent(eventstream[i])					
 					
 					for r in self.ruleVector:
 						self.findMatches(r)
 
-					batch_size = 1000
+					batch_size = 1
 
 					if i%batch_size == 0:
 						self.removeExpiredData(eventstream[i])
@@ -160,7 +168,7 @@ class Monitor:
 					if (e.eventName == missingAtom.processName):
 						eventValuesForVariables = {}
 
-						for i,var in enumerate(m.variables):
+						for i,var in enumerate(missingAtom.variables):
 							eventValuesForVariables[var] = e.values[i]
 
 						match = True
@@ -203,7 +211,7 @@ class Monitor:
 								b.variablesDefinedFlags[var] = True
 
 							for x in b.missingProcessAtoms:
-								if str(x)==str(m):
+								if str(x)==str(missingAtom):
 									b.missingProcessAtoms.remove(x) 
 
 							b.seenProcessAtoms.append(missingAtom)
