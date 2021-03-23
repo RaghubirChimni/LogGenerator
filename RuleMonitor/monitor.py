@@ -29,6 +29,8 @@ class Monitor:
 
 		start = time.time()
 
+		timesOfActs = []
+
 		i=0
 
 		while ((userInput != 'q') and (i < eventstream_length)):
@@ -53,6 +55,7 @@ class Monitor:
 				'''
 
 				if eventstream[i].eventType == "process":
+					startAct = time.time()
 					self.handleProcessEvent(eventstream[i])					
 					
 					for r in self.ruleVector:
@@ -63,6 +66,7 @@ class Monitor:
 					if i%batch_size == 0:
 						self.removeExpiredData(eventstream[i])
 
+					timesOfActs.append(time.time()-startAct)
 					i += 1
 
 			if userInput == 'x':
@@ -88,7 +92,7 @@ class Monitor:
 
 		output_string = "Number of Violations: "+str(number_of_violations)
 
-		return self.assignmentVector, output_string, (end-start)
+		return self.assignmentVector, output_string, (end-start), timesOfActs
 
 	def handleProcessEvent(self, e: Event):
 

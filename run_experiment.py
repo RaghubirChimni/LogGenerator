@@ -10,6 +10,7 @@ import sys
 import random
 import numpy as np
 import time
+import matplotlib.pyplot as plt
 
 # Given a filename, calculate the average concurrency, i.e. how many activities are active when an activity starts
 def calculate_concurrency(filename):
@@ -126,7 +127,7 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
 
 if __name__ == "__main__":
 
-    rule_file_path = sys.argv[1]
+    rule_file_path = "examples\\" + sys.argv[1] + '.txt'
     
     simulator_file_name = sys.argv[2]
 
@@ -137,10 +138,10 @@ if __name__ == "__main__":
     base = 500
 
     for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
-
+    #for target_number_activities in [10000, 20000, 50000, 100000, 200000, 500000]:
         target_number_activities = int(target_number_activities)
 
-        for number_data_elements in [2]:
+        for number_data_elements in [1]:
 
             create_new_file = True
 
@@ -159,11 +160,12 @@ if __name__ == "__main__":
             m = Monitor("MyMonitor", rule_file_path)
 
             average = 0
-            number_of_runs = 5
+            number_of_runs = 5#1
             throughput_average = 0
+            actTimes = []
 
             for i in range(number_of_runs):
-                assignment_vector, output_string, time_to_monitor = m.monitoringLoop(eventstream_file_path)
+                assignment_vector, output_string, time_to_monitor, actTimes = m.monitoringLoop(eventstream_file_path)
                 m.reset()
                 print("Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds, "+"throughput: "+str(round(number_simulated_activities/time_to_monitor,4))+" activites / second")
                 print(output_string)
@@ -179,7 +181,15 @@ if __name__ == "__main__":
             experiment_summary += "Overlap:"+ str(calculate_concurrency(eventstream_file_path))+"\n"
 
             print(experiment_summary)
+            
+            indexes = list(range(1, len(actTimes)+1))
 
+            plt.plot(indexes, actTimes)
+            plt.xlabel("Arrival Time")
+            plt.ylabel("Processing Time (s)")
+            plt.title("Processing Times of Activities")
+            plt.show()
+            
             all_experiments_summary += experiment_summary
 
     print("\nAll Experiments Summary")
