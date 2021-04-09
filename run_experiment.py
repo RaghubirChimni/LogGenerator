@@ -137,8 +137,8 @@ if __name__ == "__main__":
     #for target_number_activities in [50, 100, 500, 1000, 5000, 10000]:
     base = 500
 
-    for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
-    #for target_number_activities in [10000, 20000, 50000, 100000, 200000, 500000]:
+    #for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
+    for target_number_activities in [50000]:
         target_number_activities = int(target_number_activities)
 
         for number_data_elements in [1]:
@@ -160,7 +160,7 @@ if __name__ == "__main__":
             m = Monitor("MyMonitor", rule_file_path)
 
             average = 0
-            number_of_runs = 5#1
+            number_of_runs = 1
             throughput_average = 0
             actTimes = []
 
@@ -172,6 +172,7 @@ if __name__ == "__main__":
                 average += time_to_monitor
                 throughput_average += (number_simulated_activities/time_to_monitor)
 
+            actTimes.pop(0)
             experiment_summary = "\nExperiment Summary\n"
             experiment_summary += "rule:" + rule_file_path + "\n"
             experiment_summary += "event_stream:" + eventstream_file_path+"\n"
@@ -179,15 +180,20 @@ if __name__ == "__main__":
             experiment_summary += "Average compu time:" + str(average/number_of_runs)+"\n"
             experiment_summary += "Average throughput:"+ str(throughput_average/number_of_runs)+"\n"
             experiment_summary += "Overlap:"+ str(calculate_concurrency(eventstream_file_path))+"\n"
+            experiment_summary += "Processing Times:" + str(actTimes)+"\n"
 
             print(experiment_summary)
             
             indexes = list(range(1, len(actTimes)+1))
-
-            plt.plot(indexes, actTimes)
+            plt.scatter(indexes, actTimes)
             plt.xlabel("Arrival Time")
             plt.ylabel("Processing Time (s)")
-            plt.title("Processing Times of Activities")
+            plt.title("Processing Times of " + str(number_simulated_activities) + " Activities")
+            '''
+            for x,y in zip(indexes,actTimes):
+                label = "{:.4f}".format(y)
+                plt.annotate(label, (x,y), textcoords="offset points", xytext=(3,2),ha='center',rotation=45)
+            '''
             plt.show()
             
             all_experiments_summary += experiment_summary

@@ -31,6 +31,9 @@ class Monitor:
 
 		timesOfActs = []
 
+		startAct = 0
+		prevAct = 0
+
 		i=0
 
 		while ((userInput != 'q') and (i < eventstream_length)):
@@ -55,7 +58,11 @@ class Monitor:
 				'''
 
 				if eventstream[i].eventType == "process":
-					startAct = time.time()
+					if i % 100 == 0 and i != 0:
+						startAct = time.time()
+						timesOfActs.append(startAct - prevAct)
+						prevAct = startAct
+						
 					self.handleProcessEvent(eventstream[i])					
 					
 					for r in self.ruleVector:
@@ -66,7 +73,6 @@ class Monitor:
 					if i%batch_size == 0:
 						self.removeExpiredData(eventstream[i])
 
-					timesOfActs.append(time.time()-startAct)
 					i += 1
 
 			if userInput == 'x':
