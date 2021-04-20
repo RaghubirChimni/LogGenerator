@@ -1,0 +1,9 @@
+3atom-rule1.txt
+2atom-rule2.txt
+4atom-rule2.txt
+4atom-rule4.txt
+2atom-rule4.txt
+3atom-rule2.txt
+2atom-rule1.txt
+2atom-rule4.txt
+2atom-rule3.txt

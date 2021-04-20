@@ -1,0 +1,15 @@
+Rule 
+ReadandFAQThenResponse
+if
+read(support a, value d, class b, name c)@x
+check_faq(support a, name c)@y
+x <= y
+x+10 >= y
+then
+send_response(support a, name c)@z
+open_support(support a, name c)@w
+w <= z
+w+10 >= z
+x <= z
+x+100 >= z
+end
