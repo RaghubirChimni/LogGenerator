@@ -57,9 +57,6 @@ class Monitor:
 				self.printAssignments()
 				'''
 
-				print("len(self.assignmentVector: ", end='')
-				print(len(self.assignmentVector))
-
 				if eventstream[i].eventType == "activity":
 					if i % 100 == 0 and i != 0:
 						startAct = time.time()

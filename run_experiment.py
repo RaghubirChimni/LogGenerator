@@ -127,7 +127,7 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
 
 if __name__ == "__main__":
 
-    rule_file_path = "examples\\" + sys.argv[1] + '.txt'
+    rule_file_path = sys.argv[1]
     
     simulator_file_name = sys.argv[2]
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     base = 500
 
     #for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
-    for target_number_activities in [50000]:
+    for target_number_activities in [5000]:
         target_number_activities = int(target_number_activities)
 
         for number_data_elements in [1]:
