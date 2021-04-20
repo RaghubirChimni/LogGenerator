@@ -57,7 +57,10 @@ class Monitor:
 				self.printAssignments()
 				'''
 
-				if eventstream[i].eventType == "process":
+				print("len(self.assignmentVector: ", end='')
+				print(len(self.assignmentVector))
+
+				if eventstream[i].eventType == "activity":
 					if i % 100 == 0 and i != 0:
 						startAct = time.time()
 						timesOfActs.append(startAct - prevAct)
@@ -263,6 +266,8 @@ class Monitor:
 		for a in self.assignmentVector:
 			if latestEventTime <= a.expirationTime:
 				unexpiredData.append(a)
+			elif len(a.matchingAssignments)!=0:
+				expiredData.append(a)
 			else:
 				expiredData.append(a)
 

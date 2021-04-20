@@ -37,7 +37,7 @@ def read_eventstream_from_txt(eventStreamTxtFileName):
 			d_list.pop(0)
 			d_list.pop(0)
 			d_list.pop(0)
-			eventType = "process"
+			eventType = "activity"
 			eventName = d_list[0]
 			eventData = list(map(lambda y: y.split("=")[1], d_list[1:]))
 			eventData.append(eventTime)
