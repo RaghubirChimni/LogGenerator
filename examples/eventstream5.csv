@@ -1,8 +1,0 @@
-process,	AddToCart,	Bob,	ipad,		000311,	112
-process,	Payment,	Bob,	800,		112
-process,	Payment,	Alice,	c0,300,		1100
-process,	AddToCart,	Alice,	c0,laptop,	1100
-process,	Shipping,	Bob,	ipad,		8
-process,	Shipping,	Alice,	laptop,		10
-process,	Receipt,	Bob,	c1,800,		13
-process,	Receipt,	Alice,	c2,300,		21

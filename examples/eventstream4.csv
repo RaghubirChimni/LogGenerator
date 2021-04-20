@@ -1,3 +1,0 @@
-process,Order,Alice,laptop,0
-process,Ship,Alice,111 Main Street,laptop,5
-process,Pay,Alice,111 Main Street,laptop,300,3

@@ -1,8 +1,0 @@
-Rule 
-FAQThenResponse
-if
-read(support a, value d, class b, name c)@x
-then
-check_faq(support a, name c)@z
-x <= z
-end
