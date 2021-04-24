@@ -11,6 +11,7 @@ import random
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 # Given a filename, calculate the average concurrency, i.e. how many activities are active when an activity starts
 def calculate_concurrency(filename):
@@ -125,9 +126,136 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, nu
 
     return number_simulated_activities, cleaned_file_path
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+    
+#     rules_file = "examples\\" + sys.argv[1] + '.txt'
+#     #rule_file_path = sys.argv[1]
+    
+#     simulator_file_name = sys.argv[2]
 
-    rule_file_path = sys.argv[1]
+#     all_experiments_summary = ""
+
+
+#     #for target_number_activities in [50, 100, 500, 1000, 5000, 10000]:
+#     base = 500
+
+#     #for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
+#     for target_number_activities in [5000]:
+#         target_number_activities = int(target_number_activities)
+
+#         for number_data_elements in [1]:
+
+#             create_new_file = True
+
+#             if create_new_file:
+
+#                 # create new event stream from parameters
+#                 number_simulated_activities, ordered_simulated_file_path = create_eventstream_from_simulator(simulator_file_name, target_number_activities, number_data_elements)
+
+#                 eventstream_file_path = ordered_simulated_file_path
+#                 print("generated:"+eventstream_file_path)
+#             else:
+#                 eventstream_file_path = sys.argv[2]
+#                 number_simulated_activities = sum(1 for line in open(eventstream_file_path))
+
+#             # create rule monitors for each rule in rules_file
+#             rules = []
+#             ruleMonitors = []
+#             print(rules_file)
+#             f = open(rules_file, "r")
+#             for line in f:
+#                 if line != "\n":
+#                     print(line.strip())
+#                     ruleMonitors.append(Monitor("monitor", "examples\\" + line.strip()))
+#                     rules.append("examples\\" + line.strip())
+
+#             f.close()
+#             print(ruleMonitors)
+
+#             average = 0
+#             number_of_runs = 1
+#             throughput_average = 0
+#             actTimes = []
+#             avgProcessingTimes = []
+
+#             for j in range(len(ruleMonitors)):
+#                 for i in range(number_of_runs):
+#                     assignment_vector, output_string, time_to_monitor, actTimes = ruleMonitors[j].monitoringLoop(eventstream_file_path)
+#                     ruleMonitors[j].reset()
+#                     print("Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds, "+"throughput: "+str(round(number_simulated_activities/time_to_monitor,4))+" activites / second")
+#                     print(output_string)
+#                     average += time_to_monitor
+#                     throughput_average += (number_simulated_activities/time_to_monitor)
+#                     actTimes.pop(0)
+#                     avgProcessingTimes.append(sum(actTimes) / len(actTimes))
+
+            
+
+#             experiment_summary = "\nExperiment Summary\n"
+#             experiment_summary += "Average Processing Time: " + str(sum(avgProcessingTimes)/len(avgProcessingTimes))
+#                 # experiment_summary += "rule:" + ruleMonitors[j] + "\n"
+#                 # experiment_summary += "event_stream:" + eventstream_file_path+"\n"
+#                 # experiment_summary += "length:"+str(number_simulated_activities)+"\n"
+#                 # experiment_summary += "Average compu time:" + str(average/number_of_runs)+"\n"
+#                 # experiment_summary += "Average throughput:"+ str(throughput_average/number_of_runs)+"\n"
+#                 # experiment_summary += "Overlap:"+ str(calculate_concurrency(eventstream_file_path))+"\n"
+#                 # experiment_summary += "Processing Times:" + str(actTimes)+"\n"
+
+#             print(experiment_summary)
+            
+#             # 2D Plot
+#             indexes = list(range(1, len(avgProcessingTimes)+1))
+#             plt.scatter(indexes, avgProcessingTimes)
+#             plt.xlabel("Number of Rules (#)")
+#             plt.ylabel("Average Processing Time (s)")
+#             plt.title("Multi-Rule Experiment Results")
+#             plt.show()
+
+#             # figure out num of atoms in each rule from rule-list
+#             numActivities = []
+#             count = 0
+#             for i in range(len(rules)):
+#                 count = 0
+#                 f = open(rules[i], "r")
+                
+#                 for line in f:
+#                     if '(' in line:
+#                         count += 1
+#                 numActivities.append(count)
+#                 f.close()
+                
+
+#             # 3D Plot
+#             fig = plt.figure(figsize=(10,7))
+#             ax = plt.axes(projection='3d')
+#             ax.scatter3D(indexes, numActivities, avgProcessingTimes)
+#             ax.set_xlabel('Number of Rules (#)', fontweight = 'bold')
+#             ax.set_ylabel('Number of Activities (#)', fontweight = 'bold')
+#             ax.set_zlabel('Processing Time (s)', fontweight = 'bold')
+#             plt.title("3D Plot")
+#             plt.show()
+            
+#             # indexes = list(range(1, len(actTimes)+1))
+#             # plt.scatter(indexes, actTimes)
+#             # plt.xlabel("Arrival Time")
+#             # plt.ylabel("Processing Time (s)")
+#             # plt.title("Processing Times of " + str(number_simulated_activities) + " Activities")
+#             '''
+#             for x,y in zip(indexes,actTimes):
+#                 label = "{:.4f}".format(y)
+#                 plt.annotate(label, (x,y), textcoords="offset points", xytext=(3,2),ha='center',rotation=45)
+#             '''
+        
+            
+#             all_experiments_summary += experiment_summary
+
+#     print("\nAll Experiments Summary")
+#     print(all_experiments_summary)
+
+if __name__ == "__main__":
+    
+    rules_file = "examples\\" + sys.argv[1] + '.txt'
+    #rule_file_path = sys.argv[1]
     
     simulator_file_name = sys.argv[2]
 
@@ -138,7 +266,7 @@ if __name__ == "__main__":
     base = 500
 
     #for target_number_activities in [base, base*2, base*3, base*4, base*20, base*40, base*100]: #, base*10, base*20, base*50, base*100]:
-    for target_number_activities in [5000]:
+    for target_number_activities in [10000]:
         target_number_activities = int(target_number_activities)
 
         for number_data_elements in [1]:
@@ -156,49 +284,123 @@ if __name__ == "__main__":
                 eventstream_file_path = sys.argv[2]
                 number_simulated_activities = sum(1 for line in open(eventstream_file_path))
 
+            # create rule monitors for each rule
+            rules = []
+            atomRules = []
+            ruleMonitors = []
             
-            m = Monitor("MyMonitor", rule_file_path)
+            f = open(rules_file, "r") # open examples\\5-list-of-lists.txt
+            for line in f:
+                if line != "\n":
+                    rules.append("examples\\" + line.strip())
+
+                    f2 = open("examples\\" + line.strip(), "r") #open examples\\1-rule-list.txt ...
+                    
+                    # have atom rules
+                    for rule in f2: 
+                        
+                        if rule != '\n':
+                            atomRules.append(Monitor("monitor", "examples\\" + rule.strip()))
+                    
+                    #print(atomRules)
+                    ruleMonitors.append(atomRules) # monitor for rules of atoms for each #-list
+                    atomRules = []
+                    
+
+            print(ruleMonitors)
+
+            f.close()
+            f2.close()
 
             average = 0
             number_of_runs = 1
             throughput_average = 0
             actTimes = []
+            totalTime = 0
+            actLength = 0
+            avgProcessingTimes = []
 
-            for i in range(number_of_runs):
-                assignment_vector, output_string, time_to_monitor, actTimes = m.monitoringLoop(eventstream_file_path)
-                m.reset()
-                print("Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds, "+"throughput: "+str(round(number_simulated_activities/time_to_monitor,4))+" activites / second")
-                print(output_string)
-                average += time_to_monitor
-                throughput_average += (number_simulated_activities/time_to_monitor)
+            # [[monitor1], [monitor1, monitor2], ...   ]
+            for j in range(len(ruleMonitors)):
+                for k in range(len(ruleMonitors[j])):
+                    for i in range(number_of_runs):
+                        assignment_vector, output_string, time_to_monitor, actTimes = ruleMonitors[j][k].monitoringLoop(eventstream_file_path)
+                        ruleMonitors[j][k].reset()
+                        print("Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds, "+"throughput: "+str(round(number_simulated_activities/time_to_monitor,4))+" activites / second")
+                        print(output_string)
+                        average += time_to_monitor
+                        throughput_average += (number_simulated_activities/time_to_monitor)
+                        actTimes.pop(0)
+                        
+                        # for multiple runs
+                        totalTime += sum(actTimes)
+                        actLength = len(actTimes)
+                
+                avgProcessingTimes.append(totalTime / actLength)
+                totalTime = 0
+                actLength = 0
 
-            actTimes.pop(0)
+            
+
             experiment_summary = "\nExperiment Summary\n"
-            experiment_summary += "rule:" + rule_file_path + "\n"
-            experiment_summary += "event_stream:" + eventstream_file_path+"\n"
-            experiment_summary += "length:"+str(number_simulated_activities)+"\n"
-            experiment_summary += "Average compu time:" + str(average/number_of_runs)+"\n"
-            experiment_summary += "Average throughput:"+ str(throughput_average/number_of_runs)+"\n"
-            experiment_summary += "Overlap:"+ str(calculate_concurrency(eventstream_file_path))+"\n"
-            experiment_summary += "Processing Times:" + str(actTimes)+"\n"
+            experiment_summary += "Average Processing Time: " + str(sum(avgProcessingTimes)/len(avgProcessingTimes))
+                # experiment_summary += "rule:" + ruleMonitors[j] + "\n"
+                # experiment_summary += "event_stream:" + eventstream_file_path+"\n"
+                # experiment_summary += "length:"+str(number_simulated_activities)+"\n"
+                # experiment_summary += "Average compu time:" + str(average/number_of_runs)+"\n"
+                # experiment_summary += "Average throughput:"+ str(throughput_average/number_of_runs)+"\n"
+                # experiment_summary += "Overlap:"+ str(calculate_concurrency(eventstream_file_path))+"\n"
+                # experiment_summary += "Processing Times:" + str(actTimes)+"\n"
 
             print(experiment_summary)
             
-            indexes = list(range(1, len(actTimes)+1))
-            plt.scatter(indexes, actTimes)
-            plt.xlabel("Arrival Time")
-            plt.ylabel("Processing Time (s)")
-            plt.title("Processing Times of " + str(number_simulated_activities) + " Activities")
+            # 2D Plot
+            indexes = list(range(1, len(ruleMonitors)+1))
+            plt.scatter(indexes, avgProcessingTimes)
+            plt.xlabel("Number of Rules (#)")
+            plt.ylabel("Average Processing Time (s)")
+            plt.title("Multi-Rule Experiment Results")
+            plt.show()
+
+            #fix
+            # figure out num of atoms in each rule from rule-list
+            numActivities = []
+            count = 0
+            for i in range(len(rules)):
+                count = 0
+                f = open(rules[i], "r")
+                
+                for line in f:
+                    if '(' in line:
+                        count += 1
+                numActivities.append(count)
+                f.close()
+                
+
+            # 3D Plot
+            fig = plt.figure(figsize=(10,7))
+            ax = plt.axes(projection='3d')
+            ax.scatter3D(indexes, numActivities, avgProcessingTimes)
+            ax.set_xlabel('Number of Rules (#)', fontweight = 'bold')
+            ax.set_ylabel('Number of Activities (#)', fontweight = 'bold')
+            ax.set_zlabel('Processing Time (s)', fontweight = 'bold')
+            plt.title("3D Plot")
+            plt.show()
+            
+            # indexes = list(range(1, len(actTimes)+1))
+            # plt.scatter(indexes, actTimes)
+            # plt.xlabel("Arrival Time")
+            # plt.ylabel("Processing Time (s)")
+            # plt.title("Processing Times of " + str(number_simulated_activities) + " Activities")
             '''
             for x,y in zip(indexes,actTimes):
                 label = "{:.4f}".format(y)
                 plt.annotate(label, (x,y), textcoords="offset points", xytext=(3,2),ha='center',rotation=45)
             '''
-            plt.show()
+        
             
             all_experiments_summary += experiment_summary
 
     print("\nAll Experiments Summary")
     print(all_experiments_summary)
-
 
