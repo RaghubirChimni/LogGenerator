@@ -29,17 +29,18 @@ def read_eventstream_from_txt(eventStreamTxtFileName):
 	with open(eventStreamTxtFileName, 'r') as f:
 		for d in f.readlines():
 			d = d.strip()
-			if "START" in d or "END" in d:
-				continue
-			# remove _ _ _ numbers
 			d_list = d.split(' ')
+
+			if d[3]=="START" or d[3]=="END":
+				eventType = d[3]
+				eventData = []
+			else:
+				eventType = "activity"
+				eventData = list(map(lambda y: y.split("=")[1], d_list[4:]))
+			
 			eventTime = int(d_list[0])
-			d_list.pop(0)
-			d_list.pop(0)
-			d_list.pop(0)
-			eventType = "activity"
-			eventName = d_list[0]
-			eventData = list(map(lambda y: y.split("=")[1], d_list[1:]))
+			eventName = d_list[3]
+			
 			eventData.append(eventTime)
 			eventStream.append(Event(eventType, eventName, eventData))
 

@@ -9,6 +9,7 @@ import time
 class Monitor:
 	def __init__(self, monitorName, rule_file_path):
 		self.name = monitorName
+		self.ruleFile = rule_file_path
 		self.ruleVector = [readRuleFromTxt(rule_file_path)]
 		self.assignmentVector = []
 		self.currentTime = 0  
@@ -23,16 +24,20 @@ class Monitor:
 
 		eventstream_length = len(eventstream)
 
+		print("eventstream_length")
+		print(eventstream_length)
+
 		userMode = 'normal'
 
 		userInput = 'n'
 
 		start = time.time()
 
-		timesOfActs = []
+		event_processing_times = []
 
-		startAct = 0
-		prevAct = 0
+		first_time = time.time()
+
+		start_time = time.time()
 
 		i=0
 
@@ -40,13 +45,6 @@ class Monitor:
 			
 			if userInput == 'q':
 				break
-
-			if userInput == 'a':
-				self.printAssignments()
-
-			if userInput == 'm':
-				for r in self.ruleVector:
-					self.findMatches(r)
 
 			if userInput == 'n':
 
@@ -58,11 +56,6 @@ class Monitor:
 				'''
 
 				if eventstream[i].eventType == "activity":
-					if i % 100 == 0 and i != 0:
-						startAct = time.time()
-						timesOfActs.append(startAct - prevAct)
-						prevAct = startAct
-						
 					self.handleProcessEvent(eventstream[i])					
 					
 					for r in self.ruleVector:
@@ -75,12 +68,11 @@ class Monitor:
 
 					i += 1
 
-			if userInput == 'x':
-				self.removeExpiredData(eventstream[i])
-
 			#userInput = raw_input()
 
-		end = time.time()
+			end_time = time.time()
+			event_processing_times.append(end_time - start_time)
+			start_time = time.time()
 
 		number_of_violations = 0
 		output_string = ""
@@ -98,7 +90,7 @@ class Monitor:
 
 		output_string = "Number of Violations: "+str(number_of_violations)
 
-		return self.assignmentVector, output_string, (end-start), timesOfActs
+		return self.assignmentVector, output_string, (start_time-first_time), event_processing_times
 
 	def handleProcessEvent(self, e: Event):
 
