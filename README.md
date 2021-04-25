@@ -1,5 +1,40 @@
-# A Log Generator for Process Analytics
+# A Rule Monitor for Business Process Management
 
-In the fields of Business Process Management and Process Analytics/Mining, analysis algorithms and techniques depend on log datasets of varying sizes and characteristics. Obtaining real datasets is a challenge -- arising from accuracy, privacy, security, and secrecy concerns, and even unavailability in the case of newly installed processes. Synthetic datasets are frequently used by researchers as an effective alternative in developing/validating algorithms and techniques. 
+Python 3
 
-In this work we design and implement a general purpose business process simulator to streamline the generation of high-quality, custom log datasets. Additionally, we demonstrate an application of the simulator in tackling the business problem of making staffing decisions following the introduction of new processes in an organization. We conclude by discussing directions for improving usability of our proof-of-concept implementation.
+Usage: python run_experiment.py [path to file containing list of monitor specs] [name of output file]
+
+Example:
+
+python run_experiment.py 2-rule-monitor.txt demo-output
+
+where
+
+2-rule-monitor.txt has the following contents:
+
+first-rule.txt
+second-rule.txt
+
+and 
+
+first-rule.txt has the following contents:
+Rule 
+ReadThenFAQ
+if
+read(support a, value d, class b, name c)@x
+then
+check_faq(support a, name c)@z
+x <= z
+x+100 >= z
+end
+
+second-rule.txt has the following contents;
+Rule 
+ReadThenOpenTrust
+if
+read(support a, value d, class b, name c)@x
+then
+open_trust(support a, name c)@z
+x <= z
+x+100 >= z
+end
