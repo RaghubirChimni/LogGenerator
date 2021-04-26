@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import math
 
-def compute_moving_average(list_of_values, window_size):
+def calculate_moving_average(list_of_values, window_size):
 
     i = 0
 
@@ -35,6 +35,38 @@ def compute_moving_average(list_of_values, window_size):
 
     return moving_averages
 
+def remove_unfinished_processes(eventstream_file_path, new_eventstream_file_path):
+    unfinished_process_instances = []
+
+    with open(eventstream_file_path, 'r') as f:
+        for d in f.readlines():
+            d = d.strip()
+            d_list = d.split(' ')
+
+            if d_list[3]=="START":
+                unfinished_process_instances.append(d_list[1])
+            if d_list[3]=="END":
+                if d_list[1] in unfinished_process_instances:
+                    unfinished_process_instances.remove(d_list[1])
+                else:
+                    unfinished_process_instances.append(d_list[1])
+
+    f.close()
+
+    print(unfinished_process_instances)
+
+    with open(new_eventstream_file_path, 'w') as outfile:
+        with open(eventstream_file_path, 'r') as f:
+            for d in f.readlines():
+                d = d.strip()
+                d_list = d.split(' ')
+                if not d_list[1] in unfinished_process_instances:
+                    outfile.write(d+'\n')   
+        f.close()  
+    outfile.close()
+
+    return
+
 def merge_eventstreams_consecutive(list_of_eventstream_file_paths, outfile_name):
     
     outfile = open(outfile_name, "w")
@@ -42,7 +74,11 @@ def merge_eventstreams_consecutive(list_of_eventstream_file_paths, outfile_name)
     log_sequence_number = 1
     process_instance_id_count = 1
 
+    process_id_offset = 0
+
     for filename in list_of_eventstream_file_paths:
+
+        max_process_instance_id = 1
 
         f = open(filename,'r')
 
@@ -55,17 +91,22 @@ def merge_eventstreams_consecutive(list_of_eventstream_file_paths, outfile_name)
             log_sequence_number += 1
 
             # new process instance id
-            splitLine[1] = str(process_instance_id_count)
             if 'START' in splitLine:
-                process_instance_id_count += 1
+                max_process_instance_id = max(max_process_instance_id, int(splitLine[1]))
+
+            splitLine[1] = str(int(splitLine[1])+process_id_offset)
 
             newline = ' '.join(splitLine)
 
             outfile.write(newline+'\n')                
 
-                # close files
+        process_id_offset += max_process_instance_id+1
+
+        # close files
         f.close()
     outfile.close()
+
+    remove_unfinished_processes(outfile)
 
 
 # calculate number of atoms used in a monitor across all of its rules list
@@ -121,9 +162,9 @@ def calculate_concurrency(filename):
     f.close()
     return average_concurrency, concurrency_list
 
-def create_eventstream_from_simulator(simulator_file_name, number_activities):
+def create_eventstream_from_simulator(simulator_file_name, number_activities, limit):
     
-    # simulator generates ~950 activites per day
+    # simulator generates ~950 activities per day
     simulated_days = (1.25*number_activities/950)
 
     sm = SimulationManager(start = datetime.now(), end = datetime.now() + timedelta(days=simulated_days))
@@ -136,10 +177,10 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities):
     # limits = 50   => overlap ~10
 
     # writes results into <filename>.txt
-    sm.simulate(name=simulator_file_name,resource_limit={'support': 2, 'trust': 2}) 
+    sm.simulate(name=simulator_file_name,resource_limit={'support': limit, 'trust': limit}) 
 
     # Get file path for output of simulation
-    # Use sys.platform to disginguish between Mac OS / Windows
+    # Use sys.platform to distinguish between Mac OS / Windows
     if sys.platform == "darwin":
         simulator_output_path = "output/" + simulator_file_name + '.txt'
     else:
@@ -330,21 +371,22 @@ if __name__ == "__main__":
 
     f.close()
 
-    create_new_log = False
     # if True, a new eventstream will be created from LogGenerator simulation
     # if False, an existing eventstream will be used
     if False:
 
         # set target number of activites for log t
         number_activities = 10000
+        resource_limit = 25
 
         # create new event stream from parameters
-        number_activities, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name, number_activities)
+        number_activities, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name, number_activities, resource_limit)
 
         print("generated log: "+eventstream_file_path)
     else:
         #eventstream_file_path = sys.argv[2]
-        eventstream_file_path = 'output/gib25_10000act_cleaned.txt'
+        #eventstream_file_path = 'output/gib25_10000act_cleaned.txt'
+        eventstream_file_path = 'tofu4.txt'
         
         number_activities = sum(1 for line in open(eventstream_file_path))
 
@@ -457,7 +499,7 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()
 
-    if True:
+    if False:
 
         average_overlap, overlap_list = calculate_concurrency(eventstream_file_path)
 
@@ -465,9 +507,9 @@ if __name__ == "__main__":
         batch_processing_times = run_trial(rule_monitors[0], eventstream_file_path, batch_size, 1)
 
         # smooth with moving average
-        window_size = 50
-        smooth_overlap_list = compute_moving_average(overlap_list, window_size)
-        smooth_batch_processing_times = compute_moving_average(batch_processing_times, window_size)
+        window_size = 1000
+        smooth_overlap_list = calculate_moving_average(overlap_list, window_size)
+        smooth_batch_processing_times = calculate_moving_average(batch_processing_times, 100)
 
         #smaller_length = min(len(smooth_overlap_list),len(smooth_batch_processing_times))
 
@@ -492,6 +534,7 @@ if __name__ == "__main__":
         color = 'tab:blue'
         ax2.set_ylabel('Processing Time (s)')
         ax2.plot(xlabels_for_processing_times, smooth_batch_processing_times, color=color)
+        # set y-range
         ax2.tick_params(axis='y',labelcolor=color)
    
         title_string = "Effect of Concurrent Process Instances on Batch Processing Time\n"
