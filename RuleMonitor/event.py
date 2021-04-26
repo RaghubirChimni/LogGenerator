@@ -1,9 +1,10 @@
 class Event:
 
-	def __init__(self, eventType, eventName, values):
+	def __init__(self, eventType, eventName, values, process_id):
 		self.eventType = eventType
 		self.eventName = eventName
 		self.values = values
+		self.process_id = process_id
 
 	def __str__(self):
 		result = self.eventName+'('

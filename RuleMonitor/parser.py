@@ -23,28 +23,30 @@ def read_eventstream_from_csv(eventStreamCSVFileName):
 		return eventStream
 
 # used with the output format of Gabriel's workflow simulator
-def read_eventstream_from_txt(eventStreamTxtFileName):
-	eventStream = []
+def read_eventstream_from_txt(eventstream_txt_filename):
+	eventstream = []
 
-	with open(eventStreamTxtFileName, 'r') as f:
+	with open(eventstream_txt_filename, 'r') as f:
 		for d in f.readlines():
 			d = d.strip()
 			d_list = d.split(' ')
 
-			if d[3]=="START" or d[3]=="END":
-				eventType = d[3]
-				eventData = []
-			else:
-				eventType = "activity"
-				eventData = list(map(lambda y: y.split("=")[1], d_list[4:]))
-			
-			eventTime = int(d_list[0])
-			eventName = d_list[3]
-			
-			eventData.append(eventTime)
-			eventStream.append(Event(eventType, eventName, eventData))
+			process_id = d[1]
 
-	return eventStream
+			if d[3]=="START" or d[3]=="END":
+				event_type = d[3]
+				event_data = []
+			else:
+				event_type = "activity"
+				event_data = list(map(lambda y: y.split("=")[1], d_list[4:]))
+			
+			event_time = int(d_list[0])
+			event_name = d_list[3]
+			
+			event_data.append(event_time)
+			eventstream.append(Event(event_type, event_name, event_data, process_id))
+
+	return eventstream
 
 def readRuleFromTxt(ruleTxtFile):
 	file1 = open(ruleTxtFile, 'r')

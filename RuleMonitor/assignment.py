@@ -1,6 +1,6 @@
 class Assignment:
 
-	def __init__(self, variables, values, variablesDefinedFlags, typeOfAssignment, rulePointer, missingProcessAtoms, seenProcessAtoms, matchingAssignments, seenEvents):
+	def __init__(self, variables, values, variablesDefinedFlags, typeOfAssignment, rulePointer, missingProcessAtoms, seenProcessAtoms, matchingAssignments, seenEvents, process_id):
 
 		self.variables = variables
 		self.variablesDefinedFlags = variablesDefinedFlags
@@ -14,7 +14,8 @@ class Assignment:
 		self.seenEvents = seenEvents
 		self.matchingAssignments= matchingAssignments
 		self.complete = len(missingProcessAtoms)==0
-		self.matched = len(matchingAssignments)!=0 
+		self.matched = len(matchingAssignments)!=0
+		self.process_id = process_id
 
 		self.expirationTime = self.computeExpirationTime()
 

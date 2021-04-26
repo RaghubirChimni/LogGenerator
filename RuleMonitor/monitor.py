@@ -13,6 +13,7 @@ class Monitor:
 		self.ruleVector = [readRuleFromTxt(rule_file_path)]
 		self.assignmentVector = []
 		self.currentTime = 0  
+		self.violations = []
 
 	def reset(self):
 		self.assignmentVector = []
@@ -67,6 +68,8 @@ class Monitor:
 						self.removeExpiredData(eventstream[i])
 
 					i += 1
+				elif eventstream[i].eventType == "END":
+					self.removeAssignmentByProcessId(eventstream[i].process_id)
 
 			#userInput = raw_input()
 
@@ -122,7 +125,7 @@ class Monitor:
 
 					new_body_assignment = Assignment(rule.bodyVariables,
 					values,variablesDefinedFlags,"body",
-					rule, missingProcessAtoms,seenProcessAtoms,[],[e])
+					rule, missingProcessAtoms,seenProcessAtoms,[],[e], e.process_id)
 
 					self.assignmentVector.append(new_body_assignment)
 					newAssignments.append(new_body_assignment)
@@ -152,7 +155,7 @@ class Monitor:
 
 					new_head_assignment = Assignment(rule.headVariables,
 					values,variablesDefinedFlags,"head",
-					rule, missingProcessAtoms,seenProcessAtoms,[],[e])
+					rule, missingProcessAtoms,seenProcessAtoms,[],[e], e.process_id)
 
 					self.assignmentVector.append(new_head_assignment)
 					newAssignments.append(new_head_assignment)
@@ -250,17 +253,25 @@ class Monitor:
 		latestEventTime = int(e.values[-1])
 
 		unexpiredData = []
-		expiredData = []
 
 		for a in self.assignmentVector:
 			if latestEventTime <= a.expirationTime:
 				unexpiredData.append(a)
-			elif len(a.matchingAssignments)!=0:
-				expiredData.append(a)
-			else:
-				expiredData.append(a)
+			if not a.matched and a.typeOfAssignment == 'body':
+				self.violations.append(a)
 
 		self.assignmentVector = unexpiredData
+
+	def removeAssignmentByProcessId(process_id):
+		for a in self.assignmentVector:
+			if process_id != a.process_id:
+				unexpiredData.append(a)
+			else:
+				if not a.matched and a.typeOfAssignment == 'body':
+					self.violations.append(a)
+
+		self.assignmentVector = unexpiredData
+
 
 	def printAssignments(self):
 		for i,a in enumerate(self.assignmentVector):
