@@ -5,5 +5,5 @@ read(support a, value d, class b, name c)@x
 then
 check_faq(support a, name c)@z
 x <= z
-x+60 >= z
+x+100 >= z
 end

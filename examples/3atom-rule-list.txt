@@ -1,4 +1,0 @@
-3atom-rule1.txt
-3atom-rule2.txt
-3atom-rule3.txt
-3atom-rule4.txt

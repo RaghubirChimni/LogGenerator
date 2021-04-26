@@ -1,5 +1,0 @@
-2-rule-4-atom-list.txt
-2-rule-5-atom-list.txt
-2-rule-6-atom-list.txt
-2-rule-7-atom-list.txt
-2-rule-8-atom-list.txt
