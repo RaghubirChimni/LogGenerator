@@ -3,39 +3,39 @@
 		<Name>Ticket Triage</Name>
 		<ArrivalRate>
 			<Mon>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Mon>
 			<Tue>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Tue>
 			<Wed>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Wed>
 			<Thu>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Thu>
 			<Fri>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Fri>
 			<Sat>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Sat>
 			<Sun>
-				<TimeBlock start="0" end="6">5</TimeBlock>
-				<TimeBlock start="6" end="18">12</TimeBlock>
-				<TimeBlock start="18" end="24">6</TimeBlock>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
 			</Sun>
 		</ArrivalRate>
 		<Activities>
