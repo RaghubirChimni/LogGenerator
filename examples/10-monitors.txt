@@ -1,0 +1,10 @@
+1-rule-list.txt
+2-rule-list.txt
+3-rule-list.txt
+2-rule-4-atom-list.txt
+2-rule-5-atom-list.txt
+2-rule-6-atom-list.txt
+2-rule-7-atom-list.txt
+2-rule-8-atom-list.txt
+3-rule-6-atom-list.txt
+3-rule-7-atom-list.txt
