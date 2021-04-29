@@ -1,0 +1,9 @@
+Effect of Number of Activity Atoms in Body and Head on Batch Processing Time
+Monitors File: examples/5-lists-of-lists.txt
+Eventstream File: logs/short_test_log.txt
+2021-04-29 09:40:00.573896
+0.10605072975158691
+0.10258154869079592
+0.2077703237533569
+0.12217772006988525
+0.11110951900482179
