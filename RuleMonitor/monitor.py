@@ -25,10 +25,7 @@ class Monitor:
 
 		eventstream_length = len(eventstream)
 
-		print("eventstream_length")
-		print(eventstream_length)
-
-		userMode = 'normal'
+		print("eventstream_length: "+str(eventstream_length))
 
 		userInput = 'n'
 

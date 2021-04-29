@@ -10,6 +10,7 @@ import sys
 import random
 import numpy as np
 import time
+import datetime
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import math
@@ -308,7 +309,7 @@ def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs):
 
         batch_processing_times.append(subtotal)
 
-    print(batch_processing_times)
+    print('batch_processing_times: '+str(batch_processing_times))
 
     # list of processing time for each batch
     return batch_processing_times
@@ -376,29 +377,35 @@ if __name__ == "__main__":
     if False:
 
         # set target number of activites for log t
-        number_activities = 10000
+        number_events = 10000
         resource_limit = 25
 
         # create new event stream from parameters
-        number_activities, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name, number_activities, resource_limit)
+        number_events, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name, number_events, resource_limit)
 
         print("generated log: "+eventstream_file_path)
     else:
         #eventstream_file_path = sys.argv[2]
         #eventstream_file_path = 'output/gib25_10000act_cleaned.txt'
-        eventstream_file_path = 'tofu4.txt'
+        #eventstream_file_path = 'logs/overlap_10000act_eventstream.txt'
+        eventstream_file_path = 'logs/short_test_log.txt'
         
-        number_activities = sum(1 for line in open(eventstream_file_path))
+        number_events = sum(1 for line in open(eventstream_file_path))
 
 
     if False:
 
-        batch_sizes_for_trials = [10,20,50,100,200,500]
+        batch_sizes_for_trials = [10,20]
 
         batch_processing_times = run_batch_experiment(rule_monitors[0], eventstream_file_path, batch_sizes_for_trials)
 
-        # 2D Plot
+        # set axes range
+        plt.xlim(0, max(batch_sizes_for_trials)+1)
+        plt.ylim(0, max(batch_processing_times)*1.1)
+
+        # 2D Scatter Plot
         plt.scatter(batch_sizes_for_trials, batch_processing_times)
+        
         plt.xlabel("Batch Size")
         plt.ylabel("Average Processing Time for a Batch (sec)")
         title_string = "Effect of Batch Size on Average Processing Time for a Batch\n"
@@ -411,10 +418,10 @@ if __name__ == "__main__":
 
 
     if False:
-        number_of_runs = 5
+        number_of_runs = 1
 
         number_of_rules = []
-        average_processing_times = []
+        batch_processing_times = []
 
         for i,rule_monitor in enumerate(rule_monitors):
             print("Monitor "+str(i))
@@ -426,10 +433,14 @@ if __name__ == "__main__":
 
             one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
 
-            average_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
+            batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
         
-        # 2D Plot
-        plt.scatter(number_of_rules, average_processing_times)
+        # set axes range
+        plt.xlim(0, max(number_of_rules)+1)
+        plt.ylim(0, max(batch_processing_times)*1.1)
+
+        # 2D Scatter Plot
+        plt.scatter(number_of_rules, batch_processing_times)
         xint = range(1, math.ceil(max(number_of_rules))+1)
         plt.xticks(xint)
         plt.xlabel("Number of Rules in Monitor")
@@ -442,12 +453,12 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()
 
-    if False:
+    if True:
         number_of_body_atoms, number_of_head_atoms = calculate_activity_atoms_per_monitor(rule_monitors)
 
         number_of_runs = 5
 
-        average_processing_times = []
+        batch_processing_times = []
 
         for i,rule_monitor in enumerate(rule_monitors):
             print("Monitor "+str(i))
@@ -458,21 +469,12 @@ if __name__ == "__main__":
 
             one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
 
-            average_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
-
-        print("number_of_body_atoms")
-        print(number_of_body_atoms)
-        print()
-        print("number_of_head_atoms")
-        print(number_of_head_atoms)
-        print()
-        print("average_processing_times")
-        print(average_processing_times)
+            batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
 
         # 3D Plot
         fig = plt.figure(figsize=(10,7))
         ax = plt.axes(projection='3d')
-        ax.scatter3D(number_of_body_atoms, number_of_head_atoms, average_processing_times)
+        ax.scatter3D(number_of_body_atoms, number_of_head_atoms, batch_processing_times)
         ax.set_xlabel('Number of Body Atoms in Monitor', fontweight = 'bold')
         ax.set_ylabel('Number of Head Atoms in Monitor', fontweight = 'bold')
         ax.set_zlabel('Average Processing Time for Batch of Size '+str(batch_size)+' (sec)', fontweight = 'bold')
@@ -488,6 +490,19 @@ if __name__ == "__main__":
         number_of_rules = [len(x) for x in rule_monitors]
         number_of_activity_atoms = calculate_activity_atoms_per_monitor(rule_monitors)                
 
+        batch_processing_times = []
+
+        for i,rule_monitor in enumerate(rule_monitors):
+            print("Monitor "+str(i))
+            for m in rule_monitor:
+                print(m.ruleFile)
+
+            batch_size = 100
+
+            one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
+
+            batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
+
         # 3D Plot
         fig = plt.figure(figsize=(10,7))
         ax = plt.axes(projection='3d')
@@ -495,7 +510,12 @@ if __name__ == "__main__":
         ax.set_xlabel('Number of Rules in Monitor', fontweight = 'bold')
         ax.set_ylabel('Number of Activity Atoms Being Monitored', fontweight = 'bold')
         ax.set_zlabel('Processing Time for Batch of Size '+str(batch_size)+' (sec)', fontweight = 'bold')
-        plt.title("3D Plot")
+        title_string = 'Effect of Number of Rules and Activity Atoms on Processing Time'
+        title_string += "Rule File: "+list_of_monitors+"\n"
+        title_string += "Eventstream File: "+eventstream_file_path
+        
+        fig.tight_layout()
+        plt.title(title_string)
         plt.show()
         plt.clf()
 
@@ -509,7 +529,7 @@ if __name__ == "__main__":
         # smooth with moving average
         window_size = 1000
         smooth_overlap_list = calculate_moving_average(overlap_list, window_size)
-        smooth_batch_processing_times = calculate_moving_average(batch_processing_times, 100)
+        batch_processing_times = calculate_moving_average(batch_processing_times, 100)
 
         #smaller_length = min(len(smooth_overlap_list),len(smooth_batch_processing_times))
 
@@ -518,12 +538,13 @@ if __name__ == "__main__":
 
         xlabels_for_overlap = range(len(smooth_overlap_list))
 
-        xlabels_for_processing_times = [i*batch_size for i in range(len(smooth_batch_processing_times))]
+        xlabels_for_processing_times = [i*batch_size for i in range(len(batch_processing_times))]
 
         fig, ax1 = plt.subplots()
 
         # 2D Plot with Two Data Sets with Different Axes
         color = 'tab:red'
+
         ax1.set_xlabel('Log Sequence Number (#)')
         ax1.set_ylabel('Number of Concurrent Process Instances (#)', color=color)
         ax1.plot(xlabels_for_overlap, smooth_overlap_list, color=color)
@@ -533,7 +554,7 @@ if __name__ == "__main__":
 
         color = 'tab:blue'
         ax2.set_ylabel('Processing Time (s)')
-        ax2.plot(xlabels_for_processing_times, smooth_batch_processing_times, color=color)
+        ax2.plot(xlabels_for_processing_times, batch_processing_times, color=color)
         # set y-range
         ax2.tick_params(axis='y',labelcolor=color)
    
@@ -549,12 +570,19 @@ if __name__ == "__main__":
         plt.clf()
 
 
+    # write output to experiment file    
+    date_and_time = str(datetime.datetime.now())
     
-    # indexes = list(range(1, len(actTimes)+1))
-    # plt.scatter(indexes, actTimes)
-    # plt.xlabel("Arrival Time")
-    # plt.ylabel("Processing Time (s)")
-    # plt.title("Processing Times of " + str(number_simulated_activities) + " Activities")
+    with open('data/data_'+date_and_time+'.txt', 'w') as outfile:
+        outfile.write(title_string+'\n')   
+        outfile.write(date_and_time+'\n')
+        for t in batch_processing_times:
+            outfile.write(str(t)+'\n')
+    outfile.close()
+
+    
+
+
     '''
     for x,y in zip(indexes,actTimes):
         label = "{:.4f}".format(y)
