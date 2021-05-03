@@ -386,7 +386,7 @@ if __name__ == "__main__":
         print("generated log: "+eventstream_file_path)
     else:
         #eventstream_file_path = sys.argv[2]
-        #eventstream_file_path = 'output/gib25_10000act_cleaned.txt'
+
         #eventstream_file_path = 'logs/overlap_10000act_eventstream.txt'
         eventstream_file_path = 'logs/short_test_log.txt'
         
@@ -471,6 +471,11 @@ if __name__ == "__main__":
 
             batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
 
+        
+        title_string = "Effect of Number of Activity Atoms in Body and Head on Batch Processing Time\n"
+        title_string += "Monitors File: "+list_of_monitors+"\n"
+        title_string += "Eventstream File: "+eventstream_file_path
+        '''
         # 3D Plot
         fig = plt.figure(figsize=(10,7))
         ax = plt.axes(projection='3d')
@@ -478,12 +483,38 @@ if __name__ == "__main__":
         ax.set_xlabel('Number of Body Atoms in Monitor', fontweight = 'bold')
         ax.set_ylabel('Number of Head Atoms in Monitor', fontweight = 'bold')
         ax.set_zlabel('Average Processing Time for Batch of Size '+str(batch_size)+' (sec)', fontweight = 'bold')
-        title_string = "Effect of Number of Activity Atoms in Body and Head on Batch Processing Time\n"
-        title_string += "Monitors File: "+list_of_monitors+"\n"
-        title_string += "Eventstream File: "+eventstream_file_path
         plt.title(title_string)
         plt.tight_layout()
         plt.show()
+        plt.clf()
+        '''
+
+        val1 = range(1,max(number_of_head_atoms)+1)
+        val2 = range(1,max(number_of_body_atoms)+1)
+        val3 = [["" for _ in range(len(val1))] for _ in range(len(val2))]
+
+        print(val1)
+        print(val2)
+
+        for i in range(len(batch_processing_times)):
+            print("i: ",str(i))
+            print(number_of_body_atoms[i])
+            print(number_of_head_atoms[i])
+            val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = str(round(batch_processing_times[i],4))
+   
+        fig, ax = plt.subplots() 
+        ax.set_axis_off() 
+        table = ax.table( 
+            cellText = val3,
+            rowLabels = val2,   
+            colLabels = val1, 
+            cellLoc ='center',  
+            loc ='upper left')         
+   
+        ax.set_title(title_string, 
+             fontweight ="bold") 
+   
+        plt.show() 
         plt.clf()
 
     if False:
