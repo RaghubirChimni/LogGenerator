@@ -10,7 +10,7 @@ class Monitor:
 	def __init__(self, monitorName, rule_file_path):
 		self.name = monitorName
 		self.ruleFile = rule_file_path
-		self.ruleVector = [readRuleFromTxt(rule_file_path)]
+		self.ruleVector = [readRuleFromTxt(rule_file_path) if rule_file_path != "random" else generate_random_rule()]
 		self.assignmentVector = []
 		self.currentTime = 0  
 		self.violations = []
@@ -18,6 +18,9 @@ class Monitor:
 	def reset(self):
 		self.assignmentVector = []
 		self.currentTime = 0	
+
+	def __str__(self):
+		return 
 
 
 	def monitoring_loop(self, eventstream_file_path, batch_size):

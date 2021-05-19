@@ -334,7 +334,7 @@ def run_batch_experiment(rule_monitor, eventstream_file_path, batch_sizes_for_tr
 if __name__ == "__main__":
 #if False:
     
-    list_of_monitors = sys.argv[1]
+    number_of_rules = int(sys.argv[1])
     
     simulator_file_name = sys.argv[2]
 
@@ -342,39 +342,20 @@ if __name__ == "__main__":
 
     # create rule monitors for each list
     rule_monitors = []
-
-    first_monitor = ""
     
-    f = open(list_of_monitors, "r")
-    for rule_list in f:
-        if rule_list != "\n":
-            
-            # Get path to example folder
-            # Use sys.platform to disginguish between Mac OS / Windows
-            example_path = "examples/" if sys.platform == "darwin" else "examples\\"
-            
-            f2 = open(example_path + rule_list.strip(), "r") #open examples\\1-rule-list.txt ...
-            
-            list_of_single_rule_monitors = []
+    for _ in range(number_of_rules):
 
-            for rule in f2:     
-                if rule != '\n':
-                    list_of_single_rule_monitors.append(Monitor("monitor", example_path + rule.strip()))
+        rule_monitors.append([Monitor("monitor", "random")])
             
-            rule_monitors.append(list_of_single_rule_monitors)
+    rule_string = ""
 
-            if not first_monitor:
-                first_monitor = rule_list.strip()
-
-            f2.close()
-            
-    print(rule_monitors)
-
-    f.close()
+    for r in rule_monitors:
+        print(str(r[0].ruleVector[0]))
+        rule_string += str(r[0].ruleVector[0])+"\n"
 
     # if True, a new eventstream will be created from LogGenerator simulation
     # if False, an existing eventstream will be used
-    if True:
+    if False:
 
         # set target number of activites for log t
         number_events = 5000
@@ -394,7 +375,7 @@ if __name__ == "__main__":
 
     title_string = ""
 
-    if False:
+    if True:
 
         batch_sizes_for_trials = [1,5,10,20]
 
@@ -410,7 +391,7 @@ if __name__ == "__main__":
         plt.xlabel("Batch Size")
         plt.ylabel("Average Processing Time for a Batch (sec)")
         title_string = "Effect of Batch Size on Average Processing Time for a Batch\n"
-        title_string += "Rule File: "+first_monitor+"\n"
+        title_string += "Rule File: "+rule_string+"\n"
         title_string += "Eventstream File: "+eventstream_file_path
         plt.title(title_string)
         plt.tight_layout()
@@ -591,7 +572,7 @@ if __name__ == "__main__":
         ax2.tick_params(axis='y',labelcolor=color)
    
         title_string = "Effect of Concurrent Process Instances on Batch Processing Time\n"
-        title_string += "Rule File: "+first_monitor+"\n"
+        title_string += "Rule File: "+rule_string+"\n"
         title_string += "Eventstream File: "+eventstream_file_path
         
         fig.tight_layout()
@@ -613,8 +594,6 @@ if __name__ == "__main__":
             for t in batch_processing_times:
                 outfile.write(str(t)+'\n')
         outfile.close()
-
-    
 
 
     '''

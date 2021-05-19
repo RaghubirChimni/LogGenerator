@@ -5,6 +5,7 @@ from .processatom import ProcessAtom
 from .gapatom import GapAtom
 
 import csv
+import random
 
 def read_eventstream_from_csv(eventStreamCSVFileName):
 		eventStream = []
@@ -48,7 +49,70 @@ def read_eventstream_from_txt(eventstream_txt_filename):
 
 	return eventstream
 
+def generate_random_rule():
+
+	ruleName = "Random Rule"
+
+	number_body_process_atoms = random.randint(1,5)
+	number_head_process_atoms = random.randint(1,5)
+	number_body_gap_atoms = random.randint(1,5)
+	number_head_gap_atoms = random.randint(1,5)
+	
+	bodyProcessAtoms = []
+	bodyGapAtoms = []
+	headProcessAtoms = []
+	headGapAtoms = []
+
+	bodyProcessAtomsStrings = [
+	"access(support a, value d, class b, name c)@x",
+	"login(support a, name c)@y",
+	"register(support a, name c)@z",
+	"request(support a, name c)@w"][:number_body_process_atoms]
+
+	bodyVariables = ["x","y","z","w"][:number_body_process_atoms]
+
+	for b in bodyProcessAtomsStrings:
+		bodyProcessAtoms.append(parseProcessAtomString(b))
+
+	headProcessAtomsStrings = [
+	"schedule(support a, name c)@u",
+	"compute(support a, name c)@v",
+	"payment(support a, name c)@t",
+	"receipt(support a, name c)@s"][:number_head_process_atoms]
+
+	for h in headProcessAtomsStrings:
+		headProcessAtoms.append(parseProcessAtomString(h))
+
+	headVariables = ["u","v","t","s"][:number_head_process_atoms]
+
+	for _ in range(number_body_gap_atoms):
+
+		var1 = random.choice(bodyVariables)
+		var2 = random.choice(bodyVariables)
+		gap = random.randint(0,100)
+		direction = random.choice(["<=",">="])
+
+		line = var1+"+"+str(gap)+" "+direction+" "+var2
+		
+		bodyGapAtoms.append(parseGapAtomString(line))
+
+	for _ in range(number_head_gap_atoms):
+		var1 = random.choice(headVariables)
+		var2 = random.choice(headVariables+headVariables)
+		gap = random.randint(0,100)
+		direction = random.choice(["<=",">="])
+
+		line = var1+"+"+str(gap)+" "+direction+" "+var2
+		
+		bodyGapAtoms.append(parseGapAtomString(line))		
+
+
+	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
+	return r
+
+
 def readRuleFromTxt(ruleTxtFile):
+
 	file1 = open(ruleTxtFile, 'r')
 	
 	lines = file1.read().splitlines()
