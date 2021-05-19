@@ -332,7 +332,6 @@ def run_batch_experiment(rule_monitor, eventstream_file_path, batch_sizes_for_tr
 
 
 if __name__ == "__main__":
-
     date_and_time = str(datetime.datetime.now())
     date_and_time = date_and_time.replace(':', '--')
 #if False:
@@ -478,9 +477,6 @@ if __name__ == "__main__":
         val1 = range(1,max(number_of_head_atoms)+1)
         val2 = range(1,max(number_of_body_atoms)+1)
         val3 = [["" for _ in range(len(val1))] for _ in range(len(val2))]
-
-        print(val1)
-        print(val2)
 
         for i in range(len(batch_processing_times)):
             print("i: ",str(i))
