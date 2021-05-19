@@ -1,0 +1,15 @@
+Rule 
+ReadThenThreeAtoms
+if
+read(support a, value d, class b, name c)@x
+check_faq(support a, name c)@y
+send_response(support a, name c)@z
+x <= y
+x+50 >= y
+x <= z
+x+100 >= z
+then
+open_support(support a, name c)@w
+x <= w
+x+100 >= w
+end

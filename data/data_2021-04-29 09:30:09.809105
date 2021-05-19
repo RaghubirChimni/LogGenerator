@@ -1,0 +1,6 @@
+Effect of Batch Size on Average Processing Time for a Batch
+Rule File: 2-rule-4-atom-list.txt
+Eventstream File: logs/short_test_log.txt
+2021-04-29 09:30:09.809105
+0.0034333904584248854
+0.0062878290812174486

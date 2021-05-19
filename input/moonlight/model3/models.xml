@@ -1,0 +1,106 @@
+<Models>
+	<Model id='triage'>
+		<Name>Ticket Triage</Name>
+		<ArrivalRate>
+			<Mon>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Mon>
+			<Tue>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Tue>
+			<Wed>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Wed>
+			<Thu>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Thu>
+			<Fri>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Fri>
+			<Sat>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Sat>
+			<Sun>
+				<TimeBlock start="0" end="6">1</TimeBlock>
+				<TimeBlock start="6" end="18">0</TimeBlock>
+				<TimeBlock start="18" end="24">0</TimeBlock>
+			</Sun>
+		</ArrivalRate>
+		<Activities>
+			<Activity id="access">
+				<DataInput>
+					<DataObject id="ticket">
+						<Fields>
+							<Field name ="Value"/>
+						</Fields>
+					</DataObject>
+				</DataInput>
+				<DataOutput>
+					<DataObject id="ticket">
+						<Fields>
+							<Field name="Class"/>
+							<Field name ="Value"/>
+						</Fields>
+					</DataObject>
+				</DataOutput>
+			</Activity>
+			<Activity id="compute"/>
+			<Activity id="payment"/>
+		</Activities>
+		<Gateways>
+			<Gateway id="done">
+				<Name>Is the user finished computing?</Name>
+				<Type>Choice</Type>
+				<Distribution>
+					<Gate id='yes'>0.2</Gate>
+					<Gate id='no'>0.8</Gate>
+				</Distribution>
+			</Gateway>
+		</Gateways>
+		<Transitions>
+			<Transition source="START" destination="access">
+				<Duration>
+					<Distribution type="Const" value="10" />
+				</Duration>
+			</Transition>
+			<Transition source="access" destination="compute">
+				<Duration>
+					<Distribution type="Const" value="10" />
+				</Duration>
+			</Transition>
+			<Transition source="compute" destination="done">
+				<Duration>
+					<Distribution type="Const" value="10" />
+				</Duration>
+			</Transition>
+			<Transition source="done" source_gate="yes" destination="payment">
+				<Duration>
+					<Distribution type="Const" value="10" />
+				</Duration>
+			</Transition>
+			<Transition source="done" source_gate="no" destination="compute">
+				<Duration>
+					<Distribution type="Const" value="100" />
+				</Duration>
+			</Transition>
+			<Transition source="payment" destination="END">
+				<Duration>
+					<Distribution type="Const" value="10" />
+				</Duration>
+			</Transition>
+		</Transitions>
+		<Deadline>50000000</Deadline>
+	</Model>
+</Models>

@@ -1,0 +1,18 @@
+Rule 
+ReadThenFourAtoms
+if
+read(support a, value d, class b, name c)@x
+then
+check_faq(support a, name c)@y
+send_response(support a, name c)@z
+open_support(support a, name c)@w
+response(support a, name c)@v
+x <= y
+x+50 >= y
+x <= z
+x+100 >= z
+x <= w
+x+100 >= w
+w <= v
+w+100 >= v
+end
