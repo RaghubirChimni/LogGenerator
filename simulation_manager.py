@@ -130,11 +130,21 @@ class SimulationManager:
                                 'end_activity'))
 
     def _simulate_gateway(self, item: QueueItem) -> None:
+        print('\n'*10)
         gateway = item.element
+        print('gateway')
+        print(gateway)
         data = self.dm.read_all(item.process_id, item.process_instance_id)
         gates = gateway.get_gate(input_data=data)
         for gate in gates:
             element, gt, delay = item.running_process.process_reference.get_next(source=gateway.id, gate=gate)
+            print("element")
+            print(element)
+            print("gt")
+            print(gt)
+            print("gate",end=':')
+            print(gate)
+            print('\n\n')
             self._push_to_execution(item.successor(element, delay=delay), current_gate=gt)
 
     def _push_to_execution(self, item: QueueItem, current_gate=None):

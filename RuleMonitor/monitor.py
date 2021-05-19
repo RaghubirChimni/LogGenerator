@@ -17,9 +17,10 @@ class Monitor:
 
 	def reset(self):
 		self.assignmentVector = []
-		self.currentTime = 0		
+		self.currentTime = 0	
 
-	def monitoringLoop(self, eventstream_file_path):
+
+	def monitoring_loop(self, eventstream_file_path, batch_size):
 
 		eventstream = read_eventstream_from_txt(eventstream_file_path)
 
@@ -55,13 +56,12 @@ class Monitor:
 
 				if eventstream[i].eventType == "activity":
 					self.handleProcessEvent(eventstream[i])					
-					
-					for r in self.ruleVector:
-						self.findMatches(r)
-
-					batch_size = 1
 
 					if i%batch_size == 0:
+
+						for r in self.ruleVector:
+							self.findMatches(r)
+
 						self.removeExpiredData(eventstream[i])
 
 					i += 1

@@ -38,14 +38,18 @@ DATA_TYPES = {
     'form': 'form'
 }
 
+#example = 'support'
+example = 'moonlight/model3'
+dot_example = 'moonlight.model3'
+
 DEFAULT_PATHS = {
-    'activities': 'input/activities.xml',
-    'data':  'input/data.xml',
-    'models': 'input/models.xml',
-    'resources': 'input/resources.xml',
+    'activities': 'input/'+example+'/activities.xml',
+    'data':  'input/'+example+'/data.xml',
+    'models': 'input/'+example+'/models.xml',
+    'resources': 'input/'+example+'/resources.xml',
     'log': 'output/',
-    'rules_function': 'input.rules',
-    'data_function': 'input.data'
+    'rules_function': 'input.'+dot_example+'.rules',
+    'data_function': 'input.'+dot_example+'.data'
 }
 
 FILE_ROOT = {
