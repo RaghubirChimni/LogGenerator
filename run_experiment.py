@@ -332,6 +332,9 @@ def run_batch_experiment(rule_monitor, eventstream_file_path, batch_sizes_for_tr
 
 
 if __name__ == "__main__":
+
+    date_and_time = str(datetime.datetime.now())
+    date_and_time = date_and_time.replace(':', '--')
 #if False:
     
     number_of_rules = int(sys.argv[1])
@@ -471,6 +474,7 @@ if __name__ == "__main__":
         plt.clf()
         '''
 
+        # Table
         val1 = range(1,max(number_of_head_atoms)+1)
         val2 = range(1,max(number_of_body_atoms)+1)
         val3 = [["" for _ in range(len(val1))] for _ in range(len(val2))]
@@ -482,21 +486,41 @@ if __name__ == "__main__":
             print("i: ",str(i))
             print(number_of_body_atoms[i])
             print(number_of_head_atoms[i])
-            val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = str(round(batch_processing_times[i],2))
+            val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = format(batch_processing_times[i], '.5f')
    
         fig, ax = plt.subplots() 
+
+        header = ax.table(cellText=[['']],
+                      colLabels=['Number of Head Atoms'],
+                        bbox=[0,.35, 1,.5]
+                      )
+        
+        rowTitle = ax.table(cellText=[['']],
+                      rowLabels=['Number  \nof  \nBody  \nAtoms  '],
+                        bbox=[-.0079,0, .2,.6] #x,y,w,h
+                      )
         ax.set_axis_off() 
+        
         table = ax.table( 
             cellText = val3,
             rowLabels = val2,   
             colLabels = val1, 
             cellLoc ='center',  
-            loc ='upper left')         
-   
+            bbox=[0, 0, 1.2, .6],
+            
+            )         
+
         ax.set_title(title_string, 
              fontweight ="bold") 
-   
+        
+        if sys.platform == "darwin":
+            table_output_path = "plots/" + date_and_time + '.png'
+        else:
+            table_output_path = "plots\\" + date_and_time + '.png'
+
+        plt.savefig(table_output_path, bbox_inches="tight", pad_inches=1)
         plt.show() 
+        
         plt.clf()
 
     if False:
@@ -584,11 +608,12 @@ if __name__ == "__main__":
 
     # only add to log if an experiment was run
     if title_string:
-
-        # write output to experiment file    
-        date_and_time = str(datetime.datetime.now())
+        if sys.platform == "darwin":
+            data_output_path = "data/" + date_and_time + '.txt'
+        else:
+            data_output_path = "data\\" + date_and_time + '.txt'
         
-        with open('data/data_'+date_and_time+'.txt', 'w') as outfile:
+        with open(data_output_path, 'w') as outfile:
             outfile.write(title_string+'\n')   
             outfile.write(date_and_time+'\n')
             for t in batch_processing_times:
