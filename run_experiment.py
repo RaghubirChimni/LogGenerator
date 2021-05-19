@@ -168,7 +168,7 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, li
     # simulator generates ~950 activities per day
     simulated_days = (1.25*number_activities/950)
 
-    sm = SimulationManager(start = datetime.now(), end = datetime.now() + timedelta(days=simulated_days))
+    sm = SimulationManager(start = datetime.datetime.now(), end = datetime.datetime.now() + timedelta(days=simulated_days))
 
     simulator_file_name = simulator_file_name + "_" +str(number_activities)+'act'
 
@@ -269,7 +269,7 @@ def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs):
         for i in range(number_of_runs):
 
             # initiate the monitoring loop on the Monitor class
-            assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor[k].monitoringLoop(eventstream_file_path)
+            assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor[k].monitoring_loop( eventstream_file_path, batch_size)
             rule_monitor[k].reset()
             
             print("len(event_processing_times): ",str(len(event_processing_times)))
@@ -374,11 +374,11 @@ if __name__ == "__main__":
 
     # if True, a new eventstream will be created from LogGenerator simulation
     # if False, an existing eventstream will be used
-    if False:
+    if True:
 
         # set target number of activites for log t
-        number_events = 10000
-        resource_limit = 25
+        number_events = 5000
+        resource_limit = 50
 
         # create new event stream from parameters
         number_events, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name, number_events, resource_limit)
@@ -392,10 +392,11 @@ if __name__ == "__main__":
         
         number_events = sum(1 for line in open(eventstream_file_path))
 
+    title_string = ""
 
     if False:
 
-        batch_sizes_for_trials = [10,20]
+        batch_sizes_for_trials = [1,5,10,20]
 
         batch_processing_times = run_batch_experiment(rule_monitors[0], eventstream_file_path, batch_sizes_for_trials)
 
@@ -453,7 +454,7 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()
 
-    if True:
+    if False:
         number_of_body_atoms, number_of_head_atoms = calculate_activity_atoms_per_monitor(rule_monitors)
 
         number_of_runs = 5
@@ -500,7 +501,7 @@ if __name__ == "__main__":
             print("i: ",str(i))
             print(number_of_body_atoms[i])
             print(number_of_head_atoms[i])
-            val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = str(round(batch_processing_times[i],4))
+            val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = str(round(batch_processing_times[i],2))
    
         fig, ax = plt.subplots() 
         ax.set_axis_off() 
@@ -600,16 +601,18 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()
 
+    # only add to log if an experiment was run
+    if title_string:
 
-    # write output to experiment file    
-    date_and_time = str(datetime.datetime.now())
-    
-    with open('data/data_'+date_and_time+'.txt', 'w') as outfile:
-        outfile.write(title_string+'\n')   
-        outfile.write(date_and_time+'\n')
-        for t in batch_processing_times:
-            outfile.write(str(t)+'\n')
-    outfile.close()
+        # write output to experiment file    
+        date_and_time = str(datetime.datetime.now())
+        
+        with open('data/data_'+date_and_time+'.txt', 'w') as outfile:
+            outfile.write(title_string+'\n')   
+            outfile.write(date_and_time+'\n')
+            for t in batch_processing_times:
+                outfile.write(str(t)+'\n')
+        outfile.close()
 
     
 
