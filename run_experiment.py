@@ -357,10 +357,10 @@ if __name__ == "__main__":
 
     # if True, a new eventstream will be created from LogGenerator simulation
     # if False, an existing eventstream will be used
-    if False:
+    if True:
 
         # set target number of activites for log t
-        number_events = 5000
+        number_events = 100000
         resource_limit = 50
 
         # create new event stream from parameters
