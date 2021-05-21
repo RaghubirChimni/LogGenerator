@@ -1,0 +1,23 @@
+Effect of Batch Size on Average Processing Time for a Batch
+Rule File: Rule: Random Rule
+if
+access(support: a, value: d, class: b, name: c)@x
+login(support: a, name: c)@y
+register(support: a, name: c)@z
+request(support: a, name: c)@w
+z + 54 >= y
+w + 10 >= z
+x + 97 >= x
+w + 8 <= x
+u + 36 >= u
+then
+schedule(support: a, name: c)@u
+end
+
+
+Eventstream File: output\100k3_100000act_cleaned.txt
+2021-05-21 02--02--55.714641
+9.673387424037457e-06
+6.600251932362396e-05
+9.034074516242424e-05
+0.00017997706677280585

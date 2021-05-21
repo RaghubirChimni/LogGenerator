@@ -395,7 +395,7 @@ if __name__ == "__main__":
         title_string = "Effect of Batch Size on Average Processing Time for a Batch\n"
         title_string += "Rule File: "+rule_string+"\n"
         title_string += "Eventstream File: "+eventstream_file_path
-        plt.title(title_string)
+        plt.title(title_string, fontdict={'fontsize': 8})
         plt.tight_layout()
         plt.show()
         plt.clf()  
