@@ -56,7 +56,7 @@
 					</DataObject>
 				</DataOutput>
 			</Activity>
-			<Activity id="login"/>
+			<Activity id="request"/>
 			<Activity id="register"/>
 			<Activity id="schedule"/>
 			<Activity id="compute"/>
@@ -98,12 +98,12 @@
 			</Gateway>
 		</Gateways>
 		<Transitions>
-			<Transition source="START" destination="access">
+			<Transition source="START" destination="request">
 				<Duration>
 					<Distribution type="Const" value="10" />
 				</Duration>
 			</Transition>
-			<Transition source="access" destination="user">
+			<Transition source="request" destination="user">
 				<Duration>
 					<Distribution type="Const" value="10" />
 				</Duration>

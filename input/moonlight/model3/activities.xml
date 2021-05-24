@@ -1,7 +1,7 @@
 <Activities>
 <!--    Message Triage-->
-	<Activity id="access">
-		<Name>Access Moonlight System</Name>
+	<Activity id="request">
+		<Name>Request Access to Moonlight System</Name>
 		<Duration>
 			<Distribution type="Normal" mean="300" std="180" />
 		</Duration>
@@ -15,7 +15,61 @@
 			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
 		</Resources>
 	</Activity>
-	<Activity id="compute">
+		<Activity id="login">
+		<Name>Login as a User</Name>
+		<Duration>
+			<Distribution type="Normal" mean="300" std="180" />
+		</Duration>
+		<DataInput>
+			<DataObject id="ticket"/>
+		</DataInput>
+		<DataOutput>
+			<DataObject id="ticket"/>
+		</DataOutput>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+		<Activity id="register">
+		<Name>Register as a User</Name>
+		<Duration>
+			<Distribution type="Normal" mean="300" std="180" />
+		</Duration>
+		<DataInput>
+			<DataObject id="ticket"/>
+		</DataInput>
+		<DataOutput>
+			<DataObject id="ticket"/>
+		</DataOutput>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+	<Activity id="request">
+		<Name>Request a Machine</Name>
+		<Duration>
+			<Distribution type="Normal" mean="300" std="180" />
+		</Duration>
+		<DataInput>
+			<DataObject id="ticket"/>
+		</DataInput>
+		<DataOutput>
+			<DataObject id="ticket"/>
+		</DataOutput>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+    <Activity id="schedule">
+		<Name>Schedule</Name>
+		<Duration>
+			<Distribution type="Normal" mean="600" std="180" />
+		</Duration>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+    <Activity id="compute">
 		<Name>Compute</Name>
 		<Duration>
 			<Distribution type="Normal" mean="600" std="180" />
@@ -28,6 +82,24 @@
 		<Name>Make a Payment</Name>
 		<Duration>
 			<Distribution type="Normal" mean="900" std="180" />
+		</Duration>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+    <Activity id="receipt">
+		<Name>Create Receipt</Name>
+		<Duration>
+			<Distribution type="Normal" mean="600" std="180" />
+		</Duration>
+        <Resources>
+			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
+		</Resources>
+	</Activity>
+    <Activity id="chargeAccount">
+		<Name>Charge an Account</Name>
+		<Duration>
+			<Distribution type="Normal" mean="300" std="180" />
 		</Duration>
         <Resources>
 			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>

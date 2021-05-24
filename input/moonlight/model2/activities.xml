@@ -1,7 +1,7 @@
 <Activities>
 <!--    Message Triage-->
-	<Activity id="access">
-		<Name>Access Moonlight System</Name>
+	<Activity id="request">
+		<Name>Requet Access to Moonlight System</Name>
 		<Duration>
 			<Distribution type="Normal" mean="300" std="180" />
 		</Duration>
