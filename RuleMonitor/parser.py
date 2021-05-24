@@ -49,6 +49,71 @@ def read_eventstream_from_txt(eventstream_txt_filename):
 
 	return eventstream
 
+def generate_random_rule_with_fixed_process_atoms(number_body_process_atoms, number_head_process_atoms):
+
+	ruleName = "Random Rule"
+
+	number_body_gap_atoms = random.randint(1,3)
+	number_head_gap_atoms = random.randint(1,3)
+	
+	bodyProcessAtoms = []
+	bodyGapAtoms = []
+	headProcessAtoms = []
+	headGapAtoms = []
+
+	bodyProcessAtomsStrings = [
+	"request(support a, value d, class b, name c)@x",
+	"schedule(support a, name c)@y",
+	"compute(support a, name c)@z"][:number_body_process_atoms]
+
+	bodyVariables = ["x","y","z"][:number_body_process_atoms]
+
+	for b in bodyProcessAtomsStrings:
+		bodyProcessAtoms.append(parseProcessAtomString(b))
+
+	headProcessAtomsStrings = [
+	"payment(support a, name c)@t",
+	"receipt(support a, name c)@s"][:number_head_process_atoms]
+
+	for h in headProcessAtomsStrings:
+		headProcessAtoms.append(parseProcessAtomString(h))
+
+	headVariables = ["t","s"][:number_head_process_atoms]
+
+	for _ in range(number_body_gap_atoms):
+
+		var1 = random.choice(bodyVariables)
+		var2 = random.choice(bodyVariables)
+		gap = random.randint(0,100)
+		direction = random.choice(["<=",">="])
+
+		line = var1+"+"+str(gap)+" "+direction+" "+var2
+		
+		bodyGapAtoms.append(parseGapAtomString(line))
+
+	for _ in range(number_head_gap_atoms):
+		var1 = random.choice(headVariables)
+		var2 = random.choice(headVariables+headVariables)
+		gap = random.randint(0,100)
+		direction = random.choice(["<=",">="])
+
+		line = var1+"+"+str(gap)+" "+direction+" "+var2
+		
+		bodyGapAtoms.append(parseGapAtomString(line))
+
+	for var1 in bodyVariables:
+		for var2 in headVariables:
+			gap = 500
+			direction = ">="
+
+			line = var1+"+"+str(gap)+" "+direction+" "+var2
+
+			headGapAtoms.append(parseGapAtomString(line))
+
+	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
+	return r
+
+
 def generate_random_rule():
 
 	ruleName = "Random Rule"

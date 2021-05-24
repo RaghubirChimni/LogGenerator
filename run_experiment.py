@@ -8,6 +8,7 @@ from simulation_manager import SimulationManager
 from model_builder import ModelBuilder
 from RuleMonitor.monitor import Monitor
 import RuleMonitor.parser
+from RuleMonitor.parser import generate_random_rule_with_fixed_process_atoms
 import sys
 import random
 import numpy as np
@@ -116,26 +117,9 @@ def calculate_activity_atoms_per_monitor(rule_monitors):
     number_of_body_atoms = []
     number_of_head_atoms = []
 
-    for i in range(len(rule_monitors)):
-        body_count = 0
-        head_count = 0
-
-        for j in range(len(rule_monitors[i])):
-            f = open(rule_monitors[i][j].ruleFile, "r")
-            
-            body = True
-            
-            for line in f:
-                if '(' in line and body:
-                    body_count += 1
-                if 'then' in line:
-                    body = False
-                if '(' in line and not body:
-                    head_count += 1
-            f.close()
-
-        number_of_body_atoms.append(body_count)
-        number_of_head_atoms.append(head_count)
+    for rule_monitor in rule_monitors:
+        number_of_body_atoms.append(len(rule_monitor.ruleVector[0].bodyProcessAtoms))
+        number_of_head_atoms.append(len(rule_monitor.ruleVector[0].headProcessAtoms))
 
     return number_of_body_atoms, number_of_head_atoms
 
@@ -375,7 +359,7 @@ if __name__ == "__main__":
         plt.clf() 
 
     # Experiment for batch size
-    if True:
+    if False:
 
         # generate rule monitors
         rule_monitors = []
@@ -429,12 +413,11 @@ if __name__ == "__main__":
         plt.clf()  
 
     # Experiment for number of activity atoms in body and head
-    if False:
+    if True:
 
         # generate rule monitors
         rule_monitors = []
 
-        num_body_head_atoms = []
         for x in range(2,5):
             for y in range(2,5):
                 m = Monitor("monitor", "random")
@@ -458,7 +441,7 @@ if __name__ == "__main__":
             batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
         
         title_string = "Effect of Number of Activity Atoms in Body and Head on Batch Processing Time\n"
-        title_string += "Monitors File: "+list_of_monitors+"\n"
+        # title_string += "Monitors File: "+list_of_monitors+"\n"
         title_string += "Eventstream File: "+eventstream_file_path
         '''
         # 3D Plot
