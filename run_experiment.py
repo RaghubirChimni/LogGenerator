@@ -1,5 +1,7 @@
-# Raghubir Chimni
-# 1/27/2021
+# Raghubir Chimni and Isaac Mackey
+# file created: 1/27/2021
+# run_experiment.py
+# main loop for initiating rule monitoring experiments
 
 from datetime import datetime, timedelta
 from simulation_manager import SimulationManager
@@ -109,7 +111,6 @@ def merge_eventstreams_consecutive(list_of_eventstream_file_paths, outfile_name)
 
     remove_unfinished_processes(outfile)
 
-
 # calculate number of atoms used in a monitor across all of its rules list
 def calculate_activity_atoms_per_monitor(rule_monitors):
     number_of_body_atoms = []
@@ -162,6 +163,20 @@ def calculate_concurrency(filename):
 
     f.close()
     return average_concurrency, concurrency_list
+
+def calculate_average_activities_per_process_instance(filename):
+
+    f = open(filename, 'r')
+
+    highest_process_instance_id = 1
+    number_activities = 0
+
+    for line in f.readlines():
+        highest_process_instance_id = max(int(line.split()[1]), highest_process_instance_id)
+        if not 'START' in line and not 'END' in line:
+            number_activities += 1
+
+    return number_activities/highest_process_instance_id
 
 def create_eventstream_from_simulator(simulator_file_name, number_activities, limit):
     
@@ -257,110 +272,58 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, li
 # Input:    monitor file, log file, batch size, number of runs (take average)
 # Output:   processing time for each batch, assignment/violation vector 
 def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs):
-    
-    list_of_monitor_processing_times = [[] for _ in range(len(rule_monitor))]
 
-    # rule_monitors = [monitor1, monitor2, ...  ]
-    for k in range(len(rule_monitor)):
+    # average time to process batch of events over multiple runs of the same monitor
+    average_batch_processing_times = []
 
-        list_of_event_processing_times_lists = []
+    # number of times to run experiment to average over noisy data
+    for i in range(number_of_runs):
 
-        # number of times to run experiment to average over noisy data
-        for i in range(number_of_runs):
-
-            # initiate the monitoring loop on the Monitor class
-            assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor[k].monitoring_loop( eventstream_file_path, batch_size)
-            rule_monitor[k].reset()
-            
-            print("len(event_processing_times): ",str(len(event_processing_times)))
-
-            print("Rule "+str(k)+", Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds")
-            print(output_string)
-            
-            # we want to measure the steady-state performance
-            # remove the initial event, which includes loading time
-            event_processing_times.pop(0)
-            #duplicate the last event to maintain round number length of log
-            event_processing_times.append(event_processing_times[-1])
-
-            list_of_event_processing_times_lists.append(event_processing_times)
+        # initiate the monitoring loop on the Monitor class
+        assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor.monitoring_loop( eventstream_file_path, batch_size)
+        rule_monitor.reset()
         
+        print("len(event_processing_times): ",str(len(event_processing_times)))
+
+        print("Trial "+str(i)+": "+str(round(time_to_monitor,4))+" seconds")
+        print(output_string)
         
-        for e in range(len(event_processing_times)):
+        # we want to measure the steady-state performance
+        # remove the initial event, which includes loading time
+        event_processing_times.pop(0)
+        #duplicate the last event to maintain round number length of log
+        event_processing_times.append(event_processing_times[-1])
+        
+        batch_processing_times = []
+
+        # sum the processing times for the events in each batch from all monitors
+        for i in range(math.ceil(len(event_processing_times)/batch_size)):
             subtotal = 0
-            for run in range(number_of_runs):
-                subtotal += list_of_event_processing_times_lists[run][e]
-            list_of_monitor_processing_times[k].append(subtotal/number_of_runs)
-
-    # average time to process batch of events over multiple runs of the same single-rule monitor
-    batch_processing_times = []
-
-    print("batch_size: ",str(batch_size))
-    print("len(list_of_monitor_processing_times[0]: ",str(len(list_of_monitor_processing_times[0])))
-    
-    # sum the processing times for the events in each batch from all monitors
-    for i in range(math.ceil(len(list_of_monitor_processing_times[0])/batch_size)):
-        subtotal = 0
-        for k in range(len(rule_monitor)):
-            if (i+1)*batch_size < len(list_of_monitor_processing_times[0]):
-                subtotal += sum(list_of_monitor_processing_times[k][i*batch_size:(i+1)*batch_size])
+            if (i+1)*batch_size < len(event_processing_times):
+                subtotal += sum(event_processing_times[i*batch_size:(i+1)*batch_size])
             else:
-                subtotal += sum(list_of_monitor_processing_times[k][i*batch_size:])
+                subtotal += sum(event_processing_times[i*batch_size:])
 
-        batch_processing_times.append(subtotal)
+            batch_processing_times.append(subtotal/batch_size)
 
-    print('batch_processing_times: '+str(batch_processing_times))
+        average_batch_processing_times.append(sum(batch_processing_times)/len(batch_processing_times))
 
     # list of processing time for each batch
-    return batch_processing_times
-
-def run_batch_experiment(rule_monitor, eventstream_file_path, batch_sizes_for_trials):
-    
-    trial_results = []
-
-    number_of_runs = 3
-
-    # run a trial for each batch=
-    for batch_size in batch_sizes_for_trials:
-
-        list_of_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
-
-        # append one number per monitor, the average time to process a batch
-        trial_results.append(sum(list_of_times)/len(list_of_times))
-
-    return trial_results  
-
+    return average_batch_processing_times
 
 if __name__ == "__main__":
     date_and_time = str(datetime.datetime.now())
     date_and_time = date_and_time.replace(':', '--')
-#if False:
-    
-    number_of_rules = int(sys.argv[1])
-    
-    simulator_file_name = sys.argv[2]
+        
+    simulator_file_name = sys.argv[1]
 
     all_experiments_summary = ""
 
-    # create rule monitors for each list
-    rule_monitors = []
-    
-    for _ in range(number_of_rules):
-
-        rule_monitors.append([Monitor("monitor", "random")])
-            
-    rule_string = ""
-
-    for r in rule_monitors:
-        print(str(r[0].ruleVector[0]))
-        rule_string += str(r[0].ruleVector[0])+"\n"
-
-    # if True, a new eventstream will be created from LogGenerator simulation
+    # if True, a new eventstream will be created from LogGenerator simulator
     # if False, an existing eventstream will be used
     if True:
-
-        # set target number of activites for log t
-        number_events = 100000
+        # set target number of activites for log
+        number_events = 1000
         resource_limit = 50
 
         # create new event stream from parameters
@@ -368,27 +331,92 @@ if __name__ == "__main__":
 
         print("generated log: "+eventstream_file_path)
     else:
-        #eventstream_file_path = sys.argv[2]
-
         #eventstream_file_path = 'logs/overlap_10000act_eventstream.txt'
         eventstream_file_path = 'logs/short_test_log.txt'
         
         number_events = sum(1 for line in open(eventstream_file_path))
 
-    title_string = ""
+    # Experiment for process model length
+    if False:
+    
+        # generate rule monitors
+        rule_monitors = []
+        number_of_monitors = 12
 
-    if True:
+        for i in range(number_of_monitors):
+            m = Monitor("monitor", "random")
+            rule_monitors.append(m)
+            
+        rule_string = ""
 
-        batch_sizes_for_trials = [1,5,10,20]
+        for r in rule_monitors:
+            print(str(r.ruleVector[0]))
+            rule_string += str(r.ruleVector[0])+"\n"
 
-        batch_processing_times = run_batch_experiment(rule_monitors[0], eventstream_file_path, batch_sizes_for_trials)
+        batch_processing_times = run_batch_experiment(rule_monitors[0], eventstream_file_path, batch_sizes_for_trials)        
+
+        average_activities_per_process_instance = calculate_average_activities_per_process_instance(eventstream_file_path)
 
         # set axes range
-        plt.xlim(0, max(batch_sizes_for_trials)+1)
+        plt.xlim(5, 8)
         plt.ylim(0, max(batch_processing_times)*1.1)
 
         # 2D Scatter Plot
         plt.scatter(batch_sizes_for_trials, batch_processing_times)
+        
+        plt.xlabel("Average Activities Per Process Instance")
+        plt.ylabel("Average Processing Time for a Batch (sec)")
+        title_string = "Effect of Average Activities Per Process Instance on Average Processing Time for a Batch\n"
+        title_string += "Rule File: "+rule_string+"\n"
+        title_string += "Eventstream File: "+eventstream_file_path
+        plt.title(title_string, fontdict={'fontsize': 8})
+        plt.tight_layout()
+        plt.show()
+        plt.clf() 
+
+    # Experiment for batch size
+    if True:
+
+        # generate rule monitors
+        rule_monitors = []
+        number_of_monitors = 3
+
+        for i in range(number_of_monitors):
+            m = Monitor("monitor", "random")
+            rule_monitors.append(m)
+            
+        rule_string = ""
+
+        for r in rule_monitors:
+            print(str(r.ruleVector[0]))
+            rule_string += str(r.ruleVector[0])+"\n"
+
+        batch_sizes_for_trials = [1,5,10,20]
+
+        average_batch_processing_times = []
+
+        # run a trial for each batch
+        for batch_size in batch_sizes_for_trials:
+
+            batch_processing_times = []
+
+            for rule_monitor in rule_monitors:
+
+                number_of_runs = 3
+
+                list_of_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
+
+                # append one number per monitor, the average time to process a batch
+                batch_processing_times.append(sum(list_of_times)/len(list_of_times))
+
+            average_batch_processing_times.append(sum(batch_processing_times)/len(batch_processing_times))
+
+        # set axes range
+        plt.xlim(0, max(batch_sizes_for_trials)+1)
+        plt.ylim(0, max(average_batch_processing_times)*1.1)
+
+        # 2D Scatter Plot
+        plt.scatter(batch_sizes_for_trials, average_batch_processing_times)
         
         plt.xlabel("Batch Size")
         plt.ylabel("Average Processing Time for a Batch (sec)")
@@ -400,61 +428,34 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()  
 
-
+    # Experiment for number of activity atoms in body and head
     if False:
-        number_of_runs = 1
 
-        number_of_rules = []
-        batch_processing_times = []
+        # generate rule monitors
+        rule_monitors = []
 
-        for i,rule_monitor in enumerate(rule_monitors):
-            print("Monitor "+str(i))
-            for m in rule_monitor:
-                print(m.ruleFile)
-            number_of_rules.append(len(rule_monitor))
-
-            batch_size = 100
-
-            one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
-
-            batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
+        num_body_head_atoms = []
+        for x in range(2,5):
+            for y in range(2,5):
+                m = Monitor("monitor", "random")
+                m.ruleVector = [generate_random_rule_with_fixed_process_atoms(x,y)]
+                rule_monitors.append(m)
         
-        # set axes range
-        plt.xlim(0, max(number_of_rules)+1)
-        plt.ylim(0, max(batch_processing_times)*1.1)
-
-        # 2D Scatter Plot
-        plt.scatter(number_of_rules, batch_processing_times)
-        xint = range(1, math.ceil(max(number_of_rules))+1)
-        plt.xticks(xint)
-        plt.xlabel("Number of Rules in Monitor")
-        plt.ylabel('Processing Time for Batch of Size '+str(batch_size)+" (sec)")
-        title_string = "Effect of Number of Rules on Batch Processing Time\n"
-        title_string += "Monitors File: "+list_of_monitors+"\n"
-        title_string += "Eventstream File: "+eventstream_file_path
-        plt.title(title_string)
-        plt.tight_layout()
-        plt.show()
-        plt.clf()
-
-    if False:
         number_of_body_atoms, number_of_head_atoms = calculate_activity_atoms_per_monitor(rule_monitors)
 
-        number_of_runs = 5
-
+        # run trials
         batch_processing_times = []
 
         for i,rule_monitor in enumerate(rule_monitors):
             print("Monitor "+str(i))
-            for m in rule_monitor:
-                print(m.ruleFile)
 
             batch_size = 100
+
+            number_of_runs = 5
 
             one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
 
             batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
-
         
         title_string = "Effect of Number of Activity Atoms in Body and Head on Batch Processing Time\n"
         title_string += "Monitors File: "+list_of_monitors+"\n"
@@ -479,7 +480,6 @@ if __name__ == "__main__":
         val3 = [["" for _ in range(len(val1))] for _ in range(len(val2))]
 
         for i in range(len(batch_processing_times)):
-            print("i: ",str(i))
             print(number_of_body_atoms[i])
             print(number_of_head_atoms[i])
             val3[number_of_body_atoms[i]-1][number_of_head_atoms[i]-1] = format(batch_processing_times[i], '.5f')
@@ -516,9 +516,47 @@ if __name__ == "__main__":
 
         plt.savefig(table_output_path, bbox_inches="tight", pad_inches=1)
         plt.show() 
-        
         plt.clf()
 
+'''
+    # Experiment for number of rules
+    if False:
+        number_of_runs = 1
+
+        number_of_rules = []
+        batch_processing_times = []
+
+        for i,rule_monitor in enumerate(rule_monitors):
+            print("Monitor "+str(i))
+            for m in rule_monitor:
+                print(m.ruleFile)
+            number_of_rules.append(len(rule_monitor))
+
+            batch_size = 100
+
+            one_trial_batch_processing_times = run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs)
+
+            batch_processing_times.append(sum(one_trial_batch_processing_times)/len(one_trial_batch_processing_times))
+        
+        # set axes range
+        plt.xlim(0, max(number_of_rules)+1)
+        plt.ylim(0, max(batch_processing_times)*1.1)
+
+        # 2D Scatter Plot
+        plt.scatter(number_of_rules, batch_processing_times)
+        xint = range(1, math.ceil(max(number_of_rules))+1)
+        plt.xticks(xint)
+        plt.xlabel("Number of Rules in Monitor")
+        plt.ylabel('Processing Time for Batch of Size '+str(batch_size)+" (sec)")
+        title_string = "Effect of Number of Rules on Batch Processing Time\n"
+        title_string += "Monitors File: "+list_of_monitors+"\n"
+        title_string += "Eventstream File: "+eventstream_file_path
+        plt.title(title_string)
+        plt.tight_layout()
+        plt.show()
+        plt.clf()
+
+    # Experiment for number of rules and number of activity atoms
     if False:
         number_of_rules = [len(x) for x in rule_monitors]
         number_of_activity_atoms = calculate_activity_atoms_per_monitor(rule_monitors)                
@@ -552,6 +590,7 @@ if __name__ == "__main__":
         plt.show()
         plt.clf()
 
+    # Experiment for number of concurrent activities
     if False:
 
         average_overlap, overlap_list = calculate_concurrency(eventstream_file_path)
@@ -615,11 +654,11 @@ if __name__ == "__main__":
             for t in batch_processing_times:
                 outfile.write(str(t)+'\n')
         outfile.close()
+'''
 
-
-    '''
+'''
     for x,y in zip(indexes,actTimes):
         label = "{:.4f}".format(y)
         plt.annotate(label, (x,y), textcoords="offset points", xytext=(3,2),ha='center',rotation=45)
-    '''
+'''
 
