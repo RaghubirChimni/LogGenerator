@@ -39,8 +39,12 @@ DATA_TYPES = {
 }
 
 #example = 'support'
-example = 'moonlight/model3'
-dot_example = 'moonlight.model3'
+example = 'moonlight/model1'
+dot_example = 'moonlight.model1'
+#example = 'moonlight/model2'
+#dot_example = 'moonlight.model2'
+#example = 'moonlight/model3'
+#dot_example = 'moonlight.model3'
 
 DEFAULT_PATHS = {
     'activities': 'input/'+example+'/activities.xml',
