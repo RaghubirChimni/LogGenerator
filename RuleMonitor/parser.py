@@ -53,10 +53,10 @@ def generate_random_rule():
 
 	ruleName = "Random Rule"
 
-	number_body_process_atoms = random.randint(1,5)
-	number_head_process_atoms = random.randint(1,5)
-	number_body_gap_atoms = random.randint(1,5)
-	number_head_gap_atoms = random.randint(1,5)
+	number_body_process_atoms = random.randint(1,4)
+	number_head_process_atoms = random.randint(1,2)
+	number_body_gap_atoms = random.randint(1,3)
+	number_head_gap_atoms = random.randint(1,3)
 	
 	bodyProcessAtoms = []
 	bodyGapAtoms = []
@@ -64,26 +64,23 @@ def generate_random_rule():
 	headGapAtoms = []
 
 	bodyProcessAtomsStrings = [
-	"access(support a, value d, class b, name c)@x",
-	"login(support a, name c)@y",
-	"register(support a, name c)@z",
-	"request(support a, name c)@w"][:number_body_process_atoms]
+	"request(support a, value d, class b, name c)@x",
+	"schedule(support a, name c)@y",
+	"compute(support a, name c)@z"][:number_body_process_atoms]
 
-	bodyVariables = ["x","y","z","w"][:number_body_process_atoms]
+	bodyVariables = ["x","y","z"][:number_body_process_atoms]
 
 	for b in bodyProcessAtomsStrings:
 		bodyProcessAtoms.append(parseProcessAtomString(b))
 
 	headProcessAtomsStrings = [
-	"schedule(support a, name c)@u",
-	"compute(support a, name c)@v",
 	"payment(support a, name c)@t",
 	"receipt(support a, name c)@s"][:number_head_process_atoms]
 
 	for h in headProcessAtomsStrings:
 		headProcessAtoms.append(parseProcessAtomString(h))
 
-	headVariables = ["u","v","t","s"][:number_head_process_atoms]
+	headVariables = ["t","s"][:number_head_process_atoms]
 
 	for _ in range(number_body_gap_atoms):
 
@@ -104,14 +101,22 @@ def generate_random_rule():
 
 		line = var1+"+"+str(gap)+" "+direction+" "+var2
 		
-		bodyGapAtoms.append(parseGapAtomString(line))		
+		bodyGapAtoms.append(parseGapAtomString(line))
 
+	for var1 in bodyVariables:
+		for var2 in headVariables:
+			gap = 500
+			direction = ">="
+
+			line = var1+"+"+str(gap)+" "+direction+" "+var2
+
+			headGapAtoms.append(parseGapAtomString(line))
 
 	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
 	return r
 
 
-def readRuleFromTxt(ruleTxtFile):
+def readRuleFromTxtFile(ruleTxtFile):
 
 	file1 = open(ruleTxtFile, 'r')
 	
