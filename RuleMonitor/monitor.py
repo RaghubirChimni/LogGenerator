@@ -23,7 +23,7 @@ class Monitor:
 	def __str__(self):
 		return 
 
-	def monitoring_loop(self, eventstream_file_path, batch_size, expirationBool):
+	def monitoring_loop(self, eventstream_file_path, batch_size, expirationBool,naiveBool=True):
 
 		eventstream = read_eventstream_from_txt(eventstream_file_path)
 
@@ -58,9 +58,9 @@ class Monitor:
 				'''
 
 				if eventstream[i].eventType == "activity":
-					self.handleProcessEvent(eventstream[i])					
+					self.handleProcessEvent(eventstream[i], naiveBool)					
 
-					if i%batch_size == 0:
+					if i%batch_size == 0 and i!= 0:
 
 						for r in self.ruleVector:
 							self.findMatches(r)
@@ -97,7 +97,7 @@ class Monitor:
 
 		return self.assignmentVector, output_string, (start_time-first_time), event_processing_times
 
-	def handleProcessEvent(self, e: Event):
+	def handleProcessEvent(self, e: Event, naiveBool: bool):
 
 		newAssignments = []
 
@@ -165,72 +165,76 @@ class Monitor:
 			# loop through existing assignment vector
 			# searching for assignments this event will extend
 			for assignment in self.assignmentVector:
-				if True:
-					assignmentDefinedVariables = []
+				if naiveBool:
+					for assignment_2 in self.assignmentVector:
+						if assignment_2 == e:
+							continue
 
-					for var in assignment.variables:
-						if assignment.variablesDefinedFlags[var]:
-							assignmentDefinedVariables.append(var)
+				assignmentDefinedVariables = []
 
-					for missingAtom in assignment.missingProcessAtoms:
-						if (e.eventName == missingAtom.processName):
-							eventValuesForVariables = {}
+				for var in assignment.variables:
+					if assignment.variablesDefinedFlags[var]:
+						assignmentDefinedVariables.append(var)
 
-							for i,var in enumerate(missingAtom.variables):
-								eventValuesForVariables[var] = e.values[i]
+				for missingAtom in assignment.missingProcessAtoms:
+					if (e.eventName == missingAtom.processName):
+						eventValuesForVariables = {}
 
-							match = True
+						for i,var in enumerate(missingAtom.variables):
+							eventValuesForVariables[var] = e.values[i]
 
-							for var in missingAtom.variables:
-								if assignment.variablesDefinedFlags[var]:
-									if (assignment.values[var] != eventValuesForVariables[var]):
-										match = False;
-										break;
+						match = True
+
+						for var in missingAtom.variables:
+							if assignment.variablesDefinedFlags[var]:
+								if (assignment.values[var] != eventValuesForVariables[var]):
+									match = False;
+									break;
+						
+						if not match:
+							continue;
+
+						if assignment.typeOfAssignment == "body":
+							constraints = assignment.rulePointer.bodyGapAtoms
+						else:
+							constraints = assignment.rulePointer.headGapAtoms
+
+						mergedMap = assignment.values.copy()
+
+						for var in eventValuesForVariables.keys():
+							if not var in assignmentDefinedVariables:
+								assignmentDefinedVariables.append(var)
+							mergedMap[var] = eventValuesForVariables[var]
+
+						# check if new assignment is consistent with assignment of interest
+						consistentWithGapAtoms = True
+
+						for constraint in constraints:
+							if ((constraint.lhs in mergedMap.keys()) and
+							(constraint.rhs in mergedMap.keys())):
+								if not constraint.checkTruthValueWithAssignment(mergedMap):
+									consistentWithGapAtoms = False
+
+						if consistentWithGapAtoms:
+							b = copy.deepcopy(assignment)
 							
-							if not match:
-								continue;
+							for var in mergedMap.keys():
+								b.values[var] = mergedMap[var]
+								b.variablesDefinedFlags[var] = True
 
-							if assignment.typeOfAssignment == "body":
-								constraints = assignment.rulePointer.bodyGapAtoms
-							else:
-								constraints = assignment.rulePointer.headGapAtoms
+							for x in b.missingProcessAtoms:
+								if str(x)==str(missingAtom):
+									b.missingProcessAtoms.remove(x) 
 
-							mergedMap = assignment.values.copy()
+							b.seenProcessAtoms.append(missingAtom)
 
-							for var in eventValuesForVariables.keys():
-								if not var in assignmentDefinedVariables:
-									assignmentDefinedVariables.append(var)
-								mergedMap[var] = eventValuesForVariables[var]
+							b.seenEvents.append(e)
 
-							# check if new assignment is consistent with assignment of interest
-							consistentWithGapAtoms = True
+							b.complete = len(b.missingProcessAtoms)==0
 
-							for constraint in constraints:
-								if ((constraint.lhs in mergedMap.keys()) and
-								(constraint.rhs in mergedMap.keys())):
-									if not constraint.checkTruthValueWithAssignment(mergedMap):
-										consistentWithGapAtoms = False
+							b.expirationTime = b.computeExpirationTime()
 
-							if consistentWithGapAtoms:
-								b = copy.deepcopy(assignment)
-								
-								for var in mergedMap.keys():
-									b.values[var] = mergedMap[var]
-									b.variablesDefinedFlags[var] = True
-
-								for x in b.missingProcessAtoms:
-									if str(x)==str(missingAtom):
-										b.missingProcessAtoms.remove(x) 
-
-								b.seenProcessAtoms.append(missingAtom)
-
-								b.seenEvents.append(e)
-
-								b.complete = len(b.missingProcessAtoms)==0
-
-								b.expirationTime = b.computeExpirationTime()
-
-								self.assignmentVector.append(b)
+							self.assignmentVector.append(b)
 		
 		return newAssignments
 

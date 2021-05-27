@@ -253,7 +253,7 @@ def create_eventstream_from_simulator(simulator_file_name, number_activities, li
 
 # Input:    monitor file, log file, batch size, number of runs (take average)
 # Output:   processing time for each batch, assignment/violation vector 
-def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs, expirationBool=True):
+def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs, expirationBool=True, naiveBool=False):
 
     experiment_summary = ""
 
@@ -264,7 +264,7 @@ def run_trial(rule_monitor, eventstream_file_path, batch_size, number_of_runs, e
     for i in range(number_of_runs):
 
         # initiate the monitoring loop on the Monitor class
-        assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor.monitoring_loop( eventstream_file_path, batch_size, expirationBool)
+        assignment_vector, output_string, time_to_monitor, event_processing_times = rule_monitor.monitoring_loop( eventstream_file_path, batch_size, expirationBool, naiveBool)
         
         rule_monitor.reset()
         
@@ -562,8 +562,97 @@ if __name__ == "__main__":
         plt.show() 
         plt.clf()
 
+    # expiration optimization experiment    
+    if False:
+        experiment_type = "semi_naive_optimization"     
+
+        # generate rule monitors
+        rule_monitors = []
+        number_of_monitors = 6
+
+        for i in range(number_of_monitors):
+            m = Monitor("monitor", "random")
+            rule_monitors.append(m)
+            
+        rule_string = ""
+
+        naive_batch_processing_times_per_model = []
+        semi_naive_batch_processing_times_per_model = []
+
+        for model_file in ['model1','model2','model3']:
+
+            # set target number of activites for log
+            number_events = 1000
+            resource_limit = 20
+
+            simulator_file_name_with_model = simulator_file_name + '_' + model_file
+
+            # create new event stream from parameters
+            number_events, eventstream_file_path = create_eventstream_from_simulator(simulator_file_name_with_model, number_events, resource_limit, model_file)
+
+            print("generated log: "+eventstream_file_path)
+
+            naive_batch_processing_times_per_rule = [] 
+            semi_naive_batch_processing_times_per_rule = [] 
+
+            for naiveBool in [True,False]:
+
+                for r in rule_monitors:
+                    print(str(r.ruleVector[0]))
+                    rule_string += str(r.ruleVector[0])+"\n"
+
+                    batch_size = 100
+                    number_of_trials = 3
+                    expirationBool = True
+
+                    batch_processing_times, summary = run_trial(r, eventstream_file_path, 100, number_of_trials, expirationBool, naiveBool)
+
+                    all_experiments_summary += summary + '\n'
+
+                    if naiveBool:
+                        naive_batch_processing_times_per_rule.append(sum(batch_processing_times)/len(batch_processing_times))
+                    else:
+                        semi_naive_batch_processing_times_per_rule.append(sum(batch_processing_times)/len(batch_processing_times))
+
+            # sum over rules
+            naive_batch_processing_times_per_model.append(sum(naive_batch_processing_times_per_rule)/len(naive_batch_processing_times_per_rule))
+
+            # sum over rules
+            semi_naive_batch_processing_times_per_model.append(sum(semi_naive_batch_processing_times_per_rule)/len(semi_naive_batch_processing_times_per_rule))
+
+        labels = ['Proces model 1','Proces model 2','Proces model 3']
+
+        all_experiments_summary += str(labels) + '\n'
+        all_experiments_summary += str(naive_batch_processing_times_per_model) + '\n'
+        all_experiments_summary += str(semi_naive_batch_processing_times_per_model) + '\n'
+
+        x = np.arange(len(labels))
+
+        width = 0.35  # the width of the bars
+
+        fig, ax = plt.subplots()
+
+        rects1 = ax.bar(x - width/2, naive_batch_processing_times_per_model, width, label='Naive Evaluation',color=(0.2, 0.4, 0.6, 0.8))
+        rects2 = ax.bar(x + width/2, semi_naive_batch_processing_times_per_model, width, label='Semi-Naive Expiration',color=(0.2, 0.4, 0.6, 0.2))
+
+        # Add some text for labels, title and custom x-axis tick labels, etc.
+        ax.set_ylabel('Average Processing Time')
+        title_string = "Effect of Semi-Naive Optimization on Average Processing Time for a Batch"
+        ax.set_title(title_string)
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
+        ax.legend()
+
+        #ax.bar_label(rects1, padding=3)
+        #ax.bar_label(rects2, padding=3)
+
+        fig.tight_layout()
+
+        plt.show()
+        plt.clf()   
+
     # expiration optimization experiment
-    if True:
+    if False:
 
         experiment_type = "expiration_optimization"
 
