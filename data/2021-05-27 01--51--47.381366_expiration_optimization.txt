@@ -1,0 +1,366 @@
+Effect of Expiration Optimization on Average Processing Time for a Batch
+2021-05-27 01--51--47.381366
+len(event_processing_times): 55
+Trial 0: 0.0268 secondsNumber of Violations: 0
+[0.0002681565284729004]
+len(event_processing_times): 55
+Trial 1: 0.0243 secondsNumber of Violations: 0
+[0.0002681565284729004, 0.00024334192276000976]
+len(event_processing_times): 55
+Trial 2: 0.0231 secondsNumber of Violations: 0
+[0.0002681565284729004, 0.00024334192276000976, 0.00023133516311645507]
+
+len(event_processing_times): 55
+Trial 0: 0.0008 secondsNumber of Violations: 10
+[8.318424224853516e-06]
+len(event_processing_times): 55
+Trial 1: 0.0008 secondsNumber of Violations: 10
+[8.318424224853516e-06, 8.313655853271484e-06]
+len(event_processing_times): 55
+Trial 2: 0.0008 secondsNumber of Violations: 10
+[8.318424224853516e-06, 8.313655853271484e-06, 8.089542388916016e-06]
+
+len(event_processing_times): 55
+Trial 0: 0.0248 secondsNumber of Violations: 0
+[0.0002489590644836426]
+len(event_processing_times): 55
+Trial 1: 0.0252 secondsNumber of Violations: 0
+[0.0002489590644836426, 0.0002528071403503418]
+len(event_processing_times): 55
+Trial 2: 0.0227 secondsNumber of Violations: 0
+[0.0002489590644836426, 0.0002528071403503418, 0.00022764682769775392]
+
+len(event_processing_times): 55
+Trial 0: 0.0008 secondsNumber of Violations: 10
+[8.051395416259766e-06]
+len(event_processing_times): 55
+Trial 1: 0.0008 secondsNumber of Violations: 10
+[8.051395416259766e-06, 7.89642333984375e-06]
+len(event_processing_times): 55
+Trial 2: 0.0008 secondsNumber of Violations: 10
+[8.051395416259766e-06, 7.89642333984375e-06, 7.68899917602539e-06]
+
+len(event_processing_times): 55
+Trial 0: 0.0048 secondsNumber of Violations: 0
+[4.802703857421875e-05]
+len(event_processing_times): 55
+Trial 1: 0.0053 secondsNumber of Violations: 0
+[4.802703857421875e-05, 5.3551197052001956e-05]
+len(event_processing_times): 55
+Trial 2: 0.0047 secondsNumber of Violations: 0
+[4.802703857421875e-05, 5.3551197052001956e-05, 4.736661911010742e-05]
+
+len(event_processing_times): 55
+Trial 0: 0.0013 secondsNumber of Violations: 0
+[1.3096332550048828e-05]
+len(event_processing_times): 55
+Trial 1: 0.0012 secondsNumber of Violations: 0
+[1.3096332550048828e-05, 1.2314319610595703e-05]
+len(event_processing_times): 55
+Trial 2: 0.0012 secondsNumber of Violations: 0
+[1.3096332550048828e-05, 1.2314319610595703e-05, 1.2459754943847656e-05]
+
+len(event_processing_times): 55
+Trial 0: 0.0233 secondsNumber of Violations: 0
+[0.00023358583450317383]
+len(event_processing_times): 55
+Trial 1: 0.024 secondsNumber of Violations: 0
+[0.00023358583450317383, 0.0002407670021057129]
+len(event_processing_times): 55
+Trial 2: 0.0257 secondsNumber of Violations: 0
+[0.00023358583450317383, 0.0002407670021057129, 0.0002581024169921875]
+
+len(event_processing_times): 55
+Trial 0: 0.0009 secondsNumber of Violations: 10
+[9.36269760131836e-06]
+len(event_processing_times): 55
+Trial 1: 0.0009 secondsNumber of Violations: 10
+[9.36269760131836e-06, 9.474754333496094e-06]
+len(event_processing_times): 55
+Trial 2: 0.0009 secondsNumber of Violations: 10
+[9.36269760131836e-06, 9.474754333496094e-06, 8.838176727294922e-06]
+
+len(event_processing_times): 55
+Trial 0: 0.0257 secondsNumber of Violations: 0
+[0.00025801420211791993]
+len(event_processing_times): 55
+Trial 1: 0.0246 secondsNumber of Violations: 0
+[0.00025801420211791993, 0.0002468562126159668]
+len(event_processing_times): 55
+Trial 2: 0.0222 secondsNumber of Violations: 0
+[0.00025801420211791993, 0.0002468562126159668, 0.00022301197052001953]
+
+len(event_processing_times): 55
+Trial 0: 0.0008 secondsNumber of Violations: 10
+[7.905960083007812e-06]
+len(event_processing_times): 55
+Trial 1: 0.0008 secondsNumber of Violations: 10
+[7.905960083007812e-06, 7.901191711425781e-06]
+len(event_processing_times): 55
+Trial 2: 0.0008 secondsNumber of Violations: 10
+[7.905960083007812e-06, 7.901191711425781e-06, 7.78675079345703e-06]
+
+len(event_processing_times): 55
+Trial 0: 0.0046 secondsNumber of Violations: 0
+[4.668235778808594e-05]
+len(event_processing_times): 55
+Trial 1: 0.0051 secondsNumber of Violations: 0
+[4.668235778808594e-05, 5.0895214080810547e-05]
+len(event_processing_times): 55
+Trial 2: 0.0048 secondsNumber of Violations: 0
+[4.668235778808594e-05, 5.0895214080810547e-05, 4.808425903320313e-05]
+
+len(event_processing_times): 55
+Trial 0: 0.0012 secondsNumber of Violations: 0
+[1.251220703125e-05]
+len(event_processing_times): 55
+Trial 1: 0.0012 secondsNumber of Violations: 0
+[1.251220703125e-05, 1.233816146850586e-05]
+len(event_processing_times): 55
+Trial 2: 0.0012 secondsNumber of Violations: 0
+[1.251220703125e-05, 1.233816146850586e-05, 1.2419223785400391e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0126 secondsNumber of Violations: 2
+[0.00013517141342163087]
+len(event_processing_times): 44
+Trial 1: 0.0112 secondsNumber of Violations: 2
+[0.00013517141342163087, 0.00012311935424804687]
+len(event_processing_times): 44
+Trial 2: 0.0113 secondsNumber of Violations: 2
+[0.00013517141342163087, 0.00012311935424804687, 0.00012305021286010743]
+
+len(event_processing_times): 44
+Trial 0: 0.0006 secondsNumber of Violations: 10
+[5.304813385009766e-06]
+len(event_processing_times): 44
+Trial 1: 0.0005 secondsNumber of Violations: 10
+[5.304813385009766e-06, 5.1116943359375e-06]
+len(event_processing_times): 44
+Trial 2: 0.0005 secondsNumber of Violations: 10
+[5.304813385009766e-06, 5.1116943359375e-06, 5.085468292236328e-06]
+
+len(event_processing_times): 44
+Trial 0: 0.0044 secondsNumber of Violations: 0
+[4.4796466827392575e-05]
+len(event_processing_times): 44
+Trial 1: 0.0042 secondsNumber of Violations: 0
+[4.4796466827392575e-05, 4.255533218383789e-05]
+len(event_processing_times): 44
+Trial 2: 0.0037 secondsNumber of Violations: 0
+[4.4796466827392575e-05, 4.255533218383789e-05, 3.7779808044433596e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0005 secondsNumber of Violations: 10
+[5.121231079101563e-06]
+len(event_processing_times): 44
+Trial 1: 0.0005 secondsNumber of Violations: 10
+[5.121231079101563e-06, 5.097389221191406e-06]
+len(event_processing_times): 44
+Trial 2: 0.0005 secondsNumber of Violations: 10
+[5.121231079101563e-06, 5.097389221191406e-06, 5.218982696533203e-06]
+
+len(event_processing_times): 44
+Trial 0: 0.0084 secondsNumber of Violations: 0
+[9.280204772949219e-05]
+len(event_processing_times): 44
+Trial 1: 0.0087 secondsNumber of Violations: 0
+[9.280204772949219e-05, 9.804248809814454e-05]
+len(event_processing_times): 44
+Trial 2: 0.008 secondsNumber of Violations: 0
+[9.280204772949219e-05, 9.804248809814454e-05, 8.932113647460937e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0045 secondsNumber of Violations: 9
+[4.883289337158203e-05]
+len(event_processing_times): 44
+Trial 1: 0.0053 secondsNumber of Violations: 9
+[4.883289337158203e-05, 5.794525146484375e-05]
+len(event_processing_times): 44
+Trial 2: 0.0053 secondsNumber of Violations: 9
+[4.883289337158203e-05, 5.794525146484375e-05, 5.663156509399414e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0124 secondsNumber of Violations: 2
+[0.00013545513153076172]
+len(event_processing_times): 44
+Trial 1: 0.011 secondsNumber of Violations: 2
+[0.00013545513153076172, 0.00012131214141845703]
+len(event_processing_times): 44
+Trial 2: 0.0126 secondsNumber of Violations: 2
+[0.00013545513153076172, 0.00012131214141845703, 0.00013518571853637695]
+
+len(event_processing_times): 44
+Trial 0: 0.0006 secondsNumber of Violations: 10
+[5.788803100585938e-06]
+len(event_processing_times): 44
+Trial 1: 0.0007 secondsNumber of Violations: 10
+[5.788803100585938e-06, 6.5827369689941405e-06]
+len(event_processing_times): 44
+Trial 2: 0.0005 secondsNumber of Violations: 10
+[5.788803100585938e-06, 6.5827369689941405e-06, 5.347728729248047e-06]
+
+len(event_processing_times): 44
+Trial 0: 0.0037 secondsNumber of Violations: 0
+[3.827333450317383e-05]
+len(event_processing_times): 44
+Trial 1: 0.0043 secondsNumber of Violations: 0
+[3.827333450317383e-05, 4.3709278106689456e-05]
+len(event_processing_times): 44
+Trial 2: 0.0037 secondsNumber of Violations: 0
+[3.827333450317383e-05, 4.3709278106689456e-05, 3.772735595703125e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0005 secondsNumber of Violations: 10
+[5.30242919921875e-06]
+len(event_processing_times): 44
+Trial 1: 0.0006 secondsNumber of Violations: 10
+[5.30242919921875e-06, 5.948543548583984e-06]
+len(event_processing_times): 44
+Trial 2: 0.0007 secondsNumber of Violations: 10
+[5.30242919921875e-06, 5.948543548583984e-06, 6.737709045410157e-06]
+
+len(event_processing_times): 44
+Trial 0: 0.0089 secondsNumber of Violations: 0
+[9.783267974853515e-05]
+len(event_processing_times): 44
+Trial 1: 0.0091 secondsNumber of Violations: 0
+[9.783267974853515e-05, 9.944438934326172e-05]
+len(event_processing_times): 44
+Trial 2: 0.0086 secondsNumber of Violations: 0
+[9.783267974853515e-05, 9.944438934326172e-05, 9.544134140014648e-05]
+
+len(event_processing_times): 44
+Trial 0: 0.0058 secondsNumber of Violations: 9
+[6.201744079589844e-05]
+len(event_processing_times): 44
+Trial 1: 0.005 secondsNumber of Violations: 9
+[6.201744079589844e-05, 5.408763885498047e-05]
+len(event_processing_times): 44
+Trial 2: 0.0045 secondsNumber of Violations: 9
+[6.201744079589844e-05, 5.408763885498047e-05, 4.942417144775391e-05]
+
+len(event_processing_times): 93
+Trial 0: 0.1403 secondsNumber of Violations: 102
+[0.0014351272583007812]
+len(event_processing_times): 93
+Trial 1: 0.1594 secondsNumber of Violations: 102
+[0.0014351272583007812, 0.0016208386421203613]
+len(event_processing_times): 93
+Trial 2: 0.1368 secondsNumber of Violations: 102
+[0.0014351272583007812, 0.0016208386421203613, 0.001395261287689209]
+
+len(event_processing_times): 93
+Trial 0: 0.0011 secondsNumber of Violations: 10
+[1.0328292846679688e-05]
+len(event_processing_times): 93
+Trial 1: 0.0011 secondsNumber of Violations: 10
+[1.0328292846679688e-05, 1.0287761688232422e-05]
+len(event_processing_times): 93
+Trial 2: 0.001 secondsNumber of Violations: 10
+[1.0328292846679688e-05, 1.0287761688232422e-05, 9.882450103759766e-06]
+
+len(event_processing_times): 93
+Trial 0: 0.0699 secondsNumber of Violations: 16
+[0.0007085919380187989]
+len(event_processing_times): 93
+Trial 1: 0.0688 secondsNumber of Violations: 16
+[0.0007085919380187989, 0.0006957316398620606]
+len(event_processing_times): 93
+Trial 2: 0.0666 secondsNumber of Violations: 16
+[0.0007085919380187989, 0.0006957316398620606, 0.0006740212440490723]
+
+len(event_processing_times): 93
+Trial 0: 0.001 secondsNumber of Violations: 10
+[1.0154247283935548e-05]
+len(event_processing_times): 93
+Trial 1: 0.001 secondsNumber of Violations: 10
+[1.0154247283935548e-05, 9.834766387939453e-06]
+len(event_processing_times): 93
+Trial 2: 0.001 secondsNumber of Violations: 10
+[1.0154247283935548e-05, 9.834766387939453e-06, 9.961128234863282e-06]
+
+len(event_processing_times): 93
+Trial 0: 0.096 secondsNumber of Violations: 38
+[0.0009795451164245606]
+len(event_processing_times): 93
+Trial 1: 0.0911 secondsNumber of Violations: 38
+[0.0009795451164245606, 0.0009261274337768555]
+len(event_processing_times): 93
+Trial 2: 0.0959 secondsNumber of Violations: 38
+[0.0009795451164245606, 0.0009261274337768555, 0.0009741377830505371]
+
+len(event_processing_times): 93
+Trial 0: 0.0298 secondsNumber of Violations: 52
+[0.0003066110610961914]
+len(event_processing_times): 93
+Trial 1: 0.0314 secondsNumber of Violations: 52
+[0.0003066110610961914, 0.00033033132553100586]
+len(event_processing_times): 93
+Trial 2: 0.0283 secondsNumber of Violations: 52
+[0.0003066110610961914, 0.00033033132553100586, 0.00029159069061279296]
+
+len(event_processing_times): 93
+Trial 0: 0.136 secondsNumber of Violations: 102
+[0.0013922858238220215]
+len(event_processing_times): 93
+Trial 1: 0.1616 secondsNumber of Violations: 102
+[0.0013922858238220215, 0.0016559219360351562]
+len(event_processing_times): 93
+Trial 2: 0.1495 secondsNumber of Violations: 102
+[0.0013922858238220215, 0.0016559219360351562, 0.0015227389335632324]
+
+len(event_processing_times): 93
+Trial 0: 0.0012 secondsNumber of Violations: 10
+[1.1496543884277343e-05]
+len(event_processing_times): 93
+Trial 1: 0.001 secondsNumber of Violations: 10
+[1.1496543884277343e-05, 1.0116100311279297e-05]
+len(event_processing_times): 93
+Trial 2: 0.001 secondsNumber of Violations: 10
+[1.1496543884277343e-05, 1.0116100311279297e-05, 1.0049343109130859e-05]
+
+len(event_processing_times): 93
+Trial 0: 0.0768 secondsNumber of Violations: 16
+[0.0007755756378173828]
+len(event_processing_times): 93
+Trial 1: 0.077 secondsNumber of Violations: 16
+[0.0007755756378173828, 0.0007869315147399903]
+len(event_processing_times): 93
+Trial 2: 0.0718 secondsNumber of Violations: 16
+[0.0007755756378173828, 0.0007869315147399903, 0.000726313591003418]
+
+len(event_processing_times): 93
+Trial 0: 0.001 secondsNumber of Violations: 10
+[9.865760803222657e-06]
+len(event_processing_times): 93
+Trial 1: 0.001 secondsNumber of Violations: 10
+[9.865760803222657e-06, 9.505748748779296e-06]
+len(event_processing_times): 93
+Trial 2: 0.001 secondsNumber of Violations: 10
+[9.865760803222657e-06, 9.505748748779296e-06, 9.891986846923829e-06]
+
+len(event_processing_times): 93
+Trial 0: 0.097 secondsNumber of Violations: 38
+[0.0009852981567382813]
+len(event_processing_times): 93
+Trial 1: 0.0979 secondsNumber of Violations: 38
+[0.0009852981567382813, 0.0009951424598693848]
+len(event_processing_times): 93
+Trial 2: 0.1066 secondsNumber of Violations: 38
+[0.0009852981567382813, 0.0009951424598693848, 0.0010809588432312011]
+
+len(event_processing_times): 93
+Trial 0: 0.0319 secondsNumber of Violations: 52
+[0.0003278541564941406]
+len(event_processing_times): 93
+Trial 1: 0.0303 secondsNumber of Violations: 52
+[0.0003278541564941406, 0.0003122854232788086]
+len(event_processing_times): 93
+Trial 2: 0.0311 secondsNumber of Violations: 52
+[0.0003278541564941406, 0.0003122854232788086, 0.0003206634521484375]
+
+['Proces model 1', 'Proces model 2', 'Proces model 3']
+[9.41410329606798e-05, 5.586769845750597e-05, 0.0006079386340247261]
+[9.485668606228298e-05, 5.449930826822917e-05, 0.0005776868926154242]
+
