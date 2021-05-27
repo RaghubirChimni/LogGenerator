@@ -39,7 +39,7 @@
 			</Sun>
 		</ArrivalRate>
 		<Activities>
-			<Activity id="access">
+			<Activity id="request">
 				<DataInput>
 					<DataObject id="ticket">
 						<Fields>
@@ -56,7 +56,6 @@
 					</DataObject>
 				</DataOutput>
 			</Activity>
-			<Activity id="request"/>
 			<Activity id="register"/>
 			<Activity id="schedule"/>
 			<Activity id="compute"/>
@@ -66,27 +65,27 @@
 		</Activities>
 		<Gateways>
 			<Gateway id="user">
-				<Name>Is a machine free?</Name>
+				<Name>Is request from a user?</Name>
 				<Type>Choice</Type>
 				<Distribution>
-					<Gate id='yes'>0.5</Gate>
-					<Gate id='no'>0.5</Gate>
+					<Gate id='yes'>0.4</Gate>
+					<Gate id='no'>0.6</Gate>
 				</Distribution>	
 			</Gateway>
 			<Gateway id="free">
 				<Name>Is a machine free?</Name>
 				<Type>Choice</Type>
 				<Distribution>
-					<Gate id='yes'>0.9</Gate>
-					<Gate id='no'>0.1</Gate>
+					<Gate id='yes'>0.4</Gate>
+					<Gate id='no'>0.6</Gate>
 				</Distribution>	
 			</Gateway>
 			<Gateway id="done">
 				<Name>Is the user finished computing?</Name>
 				<Type>Choice</Type>
 				<Distribution>
-					<Gate id='yes'>0.7</Gate>
-					<Gate id='no'>0.3</Gate>
+					<Gate id='yes'>0.2</Gate>
+					<Gate id='no'>0.8</Gate>
 				</Distribution>			</Gateway>
 			<Gateway id="recurring">
 				<Name>Is this a recurring job?</Name>
@@ -108,7 +107,7 @@
 					<Distribution type="Const" value="10" />
 				</Duration>
 			</Transition>
-			<Transition source="user" source_gate="yes" destination="login">
+			<Transition source="user" source_gate="yes" destination="schedule">
 				<Duration>
 					<Distribution type="Const" value="10" />
 				</Duration>
@@ -118,17 +117,12 @@
 					<Distribution type="Const" value="10" />
 				</Duration>
 			</Transition>
-			<Transition source="login" destination="request">
+			<Transition source="request" destination="schedule">
 				<Duration>
 					<Distribution type="Const" value="10" />
 				</Duration>
 			</Transition>
-			<Transition source="register" destination="request">
-				<Duration>
-					<Distribution type="Const" value="10" />
-				</Duration>
-			</Transition>
-			<Transition source="request" destination="free">
+			<Transition source="schedule" destination="free">
 				<Duration>
 					<Distribution type="Const" value="10" />
 				</Duration>

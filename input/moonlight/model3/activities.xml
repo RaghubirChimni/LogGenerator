@@ -15,22 +15,7 @@
 			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
 		</Resources>
 	</Activity>
-		<Activity id="login">
-		<Name>Login as a User</Name>
-		<Duration>
-			<Distribution type="Normal" mean="300" std="180" />
-		</Duration>
-		<DataInput>
-			<DataObject id="ticket"/>
-		</DataInput>
-		<DataOutput>
-			<DataObject id="ticket"/>
-		</DataOutput>
-        <Resources>
-			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
-		</Resources>
-	</Activity>
-		<Activity id="register">
+	<Activity id="register">
 		<Name>Register as a User</Name>
 		<Duration>
 			<Distribution type="Normal" mean="300" std="180" />
@@ -38,24 +23,6 @@
 		<DataInput>
 			<DataObject id="ticket"/>
 		</DataInput>
-		<DataOutput>
-			<DataObject id="ticket"/>
-		</DataOutput>
-        <Resources>
-			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
-		</Resources>
-	</Activity>
-	<Activity id="request">
-		<Name>Request a Machine</Name>
-		<Duration>
-			<Distribution type="Normal" mean="300" std="180" />
-		</Duration>
-		<DataInput>
-			<DataObject id="ticket"/>
-		</DataInput>
-		<DataOutput>
-			<DataObject id="ticket"/>
-		</DataOutput>
         <Resources>
 			<Resource class_type="human" org="Company, Inc." dept="Customer Experience" role="Support">1</Resource>
 		</Resources>
