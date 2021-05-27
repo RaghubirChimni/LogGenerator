@@ -16,11 +16,25 @@ from copy import deepcopy
 
 class ModelBuilder:
     # Initialization and instance variables
-    def __init__(self, activities_file: str = DEFAULT_PATHS['activities'], resources_file: str = DEFAULT_PATHS['resources'], data_file: str = DEFAULT_PATHS['data'], models_file: str = DEFAULT_PATHS['models']) -> None:
-        self.activities_file = activities_file
-        self.resources_file = resources_file
-        self.data_file = data_file
-        self.models_file = models_file
+    def __init__(self, model_file, activities_file: str = DEFAULT_PATHS['activities'], resources_file: str = DEFAULT_PATHS['resources'], data_file: str = DEFAULT_PATHS['data'], models_file: str = DEFAULT_PATHS['models']) -> None:
+
+        example = 'moonlight/'+model_file
+        dot_example = 'moonlight.'+model_file
+
+        config_dict = {
+            'activities': 'input/'+example+'/activities.xml',
+            'data':  'input/'+example+'/data.xml',
+            'models': 'input/'+example+'/models.xml',
+            'resources': 'input/'+example+'/resources.xml',
+            'log': 'output/',
+            'rules_function': 'input.'+dot_example+'.rules',
+            'data_function': 'input.'+dot_example+'.data'
+            }
+
+        self.activities_file = config_dict['activities']
+        self.resources_file = config_dict['resources']
+        self.data_file = config_dict['data']
+        self.models_file = config_dict['models']
         self.activities = dict()
         activity_list = self.create_activities()
         self.activities = dict((act.id, act) for act in activity_list)
