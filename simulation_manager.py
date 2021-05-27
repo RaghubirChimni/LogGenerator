@@ -13,7 +13,7 @@ from execution_queue import PriorityQueue, QueueItem
 
 class SimulationManager:
     # Initialization and instance variables
-    def __init__(self, start: datetime, end: datetime) -> None:
+    def __init__(self, start: datetime, end: datetime, model_file: str) -> None:
         self.log = list()
         self.dm = None
         self.rm = None
@@ -24,10 +24,12 @@ class SimulationManager:
         self.log_queue = PriorityQueue()
         self.pending_merges = dict()
         self.running_processes = dict()
+        self.model_file = model_file
 
     # Public methods
     def simulate(self, name=None, resource_limit=None):
-        model = ModelBuilder()
+        model = ModelBuilder(self.model_file)
+        model.model_file = self.model_file
         self.models, self.rm, self.dm = model.build_all(resource_limit=resource_limit)
 
         self._initialize_queue()
