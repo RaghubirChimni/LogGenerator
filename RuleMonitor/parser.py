@@ -99,7 +99,7 @@ def generate_random_rule_with_fixed_process_atoms(number_body_process_atoms, num
 
 		line = var1+"+"+str(gap)+" "+direction+" "+var2
 		
-		bodyGapAtoms.append(parseGapAtomString(line))
+		headGapAtoms.append(parseGapAtomString(line))
 
 	for var1 in bodyVariables:
 		for var2 in headVariables:
@@ -111,6 +111,9 @@ def generate_random_rule_with_fixed_process_atoms(number_body_process_atoms, num
 			headGapAtoms.append(parseGapAtomString(line))
 
 	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
+
+	#print(r)
+
 	return r
 
 
@@ -166,7 +169,7 @@ def generate_random_rule():
 
 		line = var1+"+"+str(gap)+" "+direction+" "+var2
 		
-		bodyGapAtoms.append(parseGapAtomString(line))
+		headGapAtoms.append(parseGapAtomString(line))
 
 	for var1 in bodyVariables:
 		for var2 in headVariables:
@@ -178,6 +181,9 @@ def generate_random_rule():
 			headGapAtoms.append(parseGapAtomString(line))
 
 	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
+	
+	#print(r)
+
 	return r
 
 
