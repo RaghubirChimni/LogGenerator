@@ -116,6 +116,9 @@ def generate_random_rule_with_fixed_process_atoms(number_body_process_atoms, num
 
 	return r
 
+def without(l,e):
+	l.remove(e)
+	return l
 
 def generate_random_rule():
 
@@ -150,35 +153,61 @@ def generate_random_rule():
 
 	headVariables = ["t","s"][:number_head_process_atoms]
 
-	for _ in range(number_body_gap_atoms):
+	# random gap atoms in head
+	if len(bodyVariables)>1:
 
-		var1 = random.choice(bodyVariables)
-		var2 = random.choice(bodyVariables)
-		gap = random.randint(0,100)
-		direction = random.choice(["<=",">="])
+		for _ in range(number_body_gap_atoms):
 
-		line = var1+"+"+str(gap)+" "+direction+" "+var2
-		
-		bodyGapAtoms.append(parseGapAtomString(line))
+			var1 = random.choice(bodyVariables)
+			bodyVariablesWithout = list(bodyVariables)
+			bodyVariablesWithout.remove(var1)
+			var2 = random.choice(bodyVariablesWithout)
+			gap = random.randint(0,100)
+			direction = random.choice(["<=",">="])
 
-	for _ in range(number_head_gap_atoms):
-		var1 = random.choice(headVariables)
-		var2 = random.choice(headVariables+headVariables)
-		gap = random.randint(0,100)
-		direction = random.choice(["<=",">="])
+			line = var1+"+"+str(gap)+" "+direction+" "+var2
+			
+			bodyGapAtoms.append(parseGapAtomString(line))
 
-		line = var1+"+"+str(gap)+" "+direction+" "+var2
-		
-		headGapAtoms.append(parseGapAtomString(line))
+	# random gap atoms in head
+	if len(headVariables)>1:
 
+		for _ in range(number_head_gap_atoms):
+			var1 = random.choice(headVariables)
+			headVariablesWithout = list(headVariables)
+			headVariablesWithout.remove(var1)
+			var2 = random.choice(bodyVariables+headVariables)
+			gap = random.randint(0,100)
+			if var2 in bodyVariables:
+				direction = ">="
+			else:
+				direction = random.choice(["<=",">="])
+
+			line = var1+"+"+str(gap)+" "+direction+" "+var2
+			
+			headGapAtoms.append(parseGapAtomString(line))
+
+	# gap atoms to ensure rule is reasonable
 	for var1 in bodyVariables:
-		for var2 in headVariables:
-			gap = 500
+		bodyVariablesWithout = list(bodyVariables)
+		bodyVariablesWithout.remove(var1)
+		for var2 in bodyVariablesWithout:
+			gap = 100
 			direction = ">="
 
 			line = var1+"+"+str(gap)+" "+direction+" "+var2
 
-			headGapAtoms.append(parseGapAtomString(line))
+			bodyGapAtoms.append(parseGapAtomString(line))
+
+	# gap atoms to ensure rule is bounded
+	for var2 in headVariables:
+		var1 = random.choice(bodyVariables)
+		gap = 100
+		direction = ">="
+
+		line = var1+"+"+str(gap)+" "+direction+" "+var2
+
+		headGapAtoms.append(parseGapAtomString(line))
 
 	r = Rule(ruleName, bodyProcessAtoms, bodyGapAtoms, headProcessAtoms, headGapAtoms)
 	
