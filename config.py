@@ -43,8 +43,8 @@ example = 'moonlight/model1'
 dot_example = 'moonlight.model1'
 #example = 'moonlight/model2'
 #dot_example = 'moonlight.model2'
-#example = 'moonlight/model3'
-#dot_example = 'moonlight.model3'
+#example = 'moonlight/XXX'
+#dot_example = 'moonlight.XXX'
 
 DEFAULT_PATHS = {
     'activities': 'input/'+example+'/activities.xml',
