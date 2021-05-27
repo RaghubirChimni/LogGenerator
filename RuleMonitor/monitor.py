@@ -18,11 +18,12 @@ class Monitor:
 	def reset(self):
 		self.assignmentVector = []
 		self.currentTime = 0	
+		self.violations = []
 
 	def __str__(self):
 		return 
 
-	def monitoring_loop(self, eventstream_file_path, batch_size):
+	def monitoring_loop(self, eventstream_file_path, batch_size, expirationBool):
 
 		eventstream = read_eventstream_from_txt(eventstream_file_path)
 
@@ -64,11 +65,13 @@ class Monitor:
 						for r in self.ruleVector:
 							self.findMatches(r)
 
-						self.removeExpiredData(eventstream[i])
+						if expirationBool:
+							self.removeExpiredData(eventstream[i])
 
 					i += 1
 				elif eventstream[i].eventType == "END":
-					self.removeAssignmentByProcessId(eventstream[i].process_id)
+					if expirationBool:
+						self.removeAssignmentByProcessId(eventstream[i].process_id)
 
 			#userInput = raw_input()
 
